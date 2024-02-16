@@ -5,12 +5,12 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.Dealership.Vehicles.Cars.Services.CarBrandService;
-import pt.Dealership.Core.controllers.Controller;
+import pt.Dealership.Core.controllers.ControllerBase;
 import pt.Dealership.Vehicles.Cars.Models.CarBrand;
 
 @RestController
 @RequestMapping("/api/brand")
-public class CarBrandController extends Controller<CarBrand, Long> {
+public class CarBrandController extends ControllerBase<CarBrand, Long> {
 
     @Autowired
     private CarBrandService service;

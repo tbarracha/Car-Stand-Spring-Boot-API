@@ -5,6 +5,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import pt.Dealership.Core.interfaces.ICrud;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public abstract class Controller<EntityType extends RepresentationModel<EntityType>, Key> {
+public abstract class ControllerBase<EntityType extends RepresentationModel<EntityType>, Key> { //implements ICrud<ResponseEntity<EntityType>, Key> {
 
     // Public API
     // ==============================================================================================================
@@ -55,34 +56,39 @@ public abstract class Controller<EntityType extends RepresentationModel<EntityTy
         List<Link> links = new ArrayList<>();
 
         try {
-            Class<? extends Controller> clazz = this.getClass();    // Get the class of the current controller
+            Class<? extends ControllerBase> clazz = this.getClass();    // Get the class of the current controller
             Method[] methods = clazz.getDeclaredMethods();          // Get all methods of the class
 
             for (Method method : methods) {
                 // Generate link for getter methods
                 if (addGetters && method.getName().startsWith("get")) {
                     Link link = linkTo(methodOn(clazz).getById((Key) model.getClass().getMethod("getId").invoke(model))).withRel("getById");
-                    links.add(link);
+                    if (!links.contains(link))
+                        links.add(link);
 
                 // Generate link for getAll method
                 } else if (addGetters && method.getName().equals("getAll")) {
                     Link link = linkTo(methodOn(clazz).getAll()).withRel("getAll");
-                    links.add(link);
+                    if (!links.contains(link))
+                        links.add(link);
 
                 // Generate link for create method
                 } else if (addCreate && method.getName().equals("create")) {
                     Link link = linkTo(methodOn(clazz).create(model)).withRel("create");
-                    links.add(link);
+                    if (!links.contains(link))
+                        links.add(link);
 
                 // Generate link for update method
                 } else if (addUpdate && method.getName().equals("update")) {
                     Link link = linkTo(methodOn(clazz).update((Key) model.getClass().getMethod("getId").invoke(model), model)).withRel("update");
-                    links.add(link);
+                    if (!links.contains(link))
+                        links.add(link);
 
                 // Generate link for delete method
                 } else if (addDelete && method.getName().equals("delete")) {
                     Link link = linkTo(methodOn(clazz).delete((Key) model.getClass().getMethod("getId").invoke(model))).withRel("delete");
-                    links.add(link);
+                    if (!links.contains(link))
+                        links.add(link);
                 }
             }
 
@@ -98,20 +104,22 @@ public abstract class Controller<EntityType extends RepresentationModel<EntityTy
         List<Link> links = new ArrayList<>();
 
         try {
-            Class<? extends Controller> clazz = this.getClass();    // Get the class of the current controller
+            Class<? extends ControllerBase> clazz = this.getClass();    // Get the class of the current controller
             Method[] methods = clazz.getDeclaredMethods();          // Get all methods of the class
 
             for (Method method : methods) {
                 // Add self link to the collection
                 if (addSelfLink && method.getName().equals("getAll")) {
-                    Link selfLink = linkTo(methodOn(clazz).getAll()).withSelfRel();
-                    links.add(selfLink);
+                    Link link = linkTo(methodOn(clazz).getAll()).withSelfRel();
+                    if (!links.contains(link))
+                        links.add(link);
                 }
 
                 // Add create link
                 if (addCreateLink && method.getName().equals("create")) {
-                    Link createLink = linkTo(methodOn(clazz).create(null)).withRel("create");
-                    links.add(createLink);
+                    Link link = linkTo(methodOn(clazz).create(null)).withRel("create");
+                    if (!links.contains(link))
+                        links.add(link);
                 }
             }
 
