@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.hateoas.RepresentationModel;
 
 @Entity
-public class Condition extends RepresentationModel<Condition> {
+public class CarCondition extends RepresentationModel<CarCondition> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -12,7 +12,7 @@ public class Condition extends RepresentationModel<Condition> {
     @Column(unique = true)
     String condition;
 
-    public Condition(long id, String condition) {
+    public CarCondition(long id, String condition) {
         this.id = id;
         this.condition = condition;
     }

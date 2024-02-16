@@ -5,10 +5,13 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 public class CarModel extends RepresentationModel<CarModel> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    long brandId;
+
+    @OneToOne
+    CarBrand brand;
 
     @Column(unique = true)
     String name;
@@ -17,9 +20,13 @@ public class CarModel extends RepresentationModel<CarModel> {
 
     }
 
-    public CarModel(long id, long brandId, String name) {
-        this.id = id;
-        this.brandId = brandId;
+    public CarModel(long brandId, String name) {
+
+        this.name = name;
+    }
+
+    public CarModel(CarBrand brand, String name) {
+        this.brand = brand;
         this.name = name;
     }
 
@@ -27,16 +34,8 @@ public class CarModel extends RepresentationModel<CarModel> {
         return id;
     }
 
-    public long getBrandId() {
-        return brandId;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setBrandId(long brandId) {
-        this.brandId = brandId;
     }
 
     public void setName(String name) {

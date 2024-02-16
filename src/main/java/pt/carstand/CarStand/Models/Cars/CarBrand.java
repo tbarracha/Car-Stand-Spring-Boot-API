@@ -18,8 +18,7 @@ public class CarBrand extends RepresentationModel<CarBrand> implements IIdentifi
 
     }
 
-    public CarBrand(long id, String name) {
-        this.id = id;
+    public CarBrand(String name) {
         this.name = name;
     }
 

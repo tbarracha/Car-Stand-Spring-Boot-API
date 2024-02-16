@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.carstand.Core.controllers.Controller;
-import pt.carstand.CarStand.Data.BrandRepository;
+import pt.carstand.CarStand.Data.CarBrandRepository;
 import pt.carstand.CarStand.Models.Cars.CarBrand;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -14,10 +14,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/brand")
-public class BrandController extends Controller<CarBrand, Long> {
+public class CarBrandController extends Controller<CarBrand, Long> {
 
     @Autowired
-    private BrandRepository repository;
+    private CarBrandRepository repository;
 
     // Public API
     // =======================================================================================================
@@ -25,10 +25,10 @@ public class BrandController extends Controller<CarBrand, Long> {
     // Populate
     @GetMapping(value = "/populate", produces = "application/json")
     public ResponseEntity<String> populate() {
-        create(new CarBrand(1, "BMW"));
-        create(new CarBrand(2, "Audi"));
-        create(new CarBrand(3, "Tesla"));
-        create(new CarBrand(4, "Mercedes"));
+        create(new CarBrand("BMW"));
+        create(new CarBrand("Audi"));
+        create(new CarBrand("Tesla"));
+        create(new CarBrand("Mercedes"));
 
         return new ResponseEntity<>("Created 4 brands", HttpStatus.OK);
     }
@@ -65,8 +65,8 @@ public class BrandController extends Controller<CarBrand, Long> {
         var payload = getAllInRepo(repository);
 
         var collectionModel = CollectionModel.of(payload);
-        collectionModel.add(linkTo(methodOn(BrandController.class).getAll()).withSelfRel().withTitle("Get All"));
-        collectionModel.add(linkTo(methodOn(BrandController.class).create(new CarBrand())).withSelfRel().withTitle("Create"));
+        collectionModel.add(linkTo(methodOn(CarBrandController.class).getAll()).withSelfRel().withTitle("Get All"));
+        collectionModel.add(linkTo(methodOn(CarBrandController.class).create(new CarBrand())).withSelfRel().withTitle("Create"));
 
         return collectionModel;
     }
@@ -118,20 +118,20 @@ public class BrandController extends Controller<CarBrand, Long> {
     @Override
     protected CarBrand addLinks(CarBrand model, boolean addGetters, boolean addCreate, boolean addUpdate, boolean addDelete) {
         if (addGetters) {
-            model.add(linkTo(methodOn(BrandController.class).get(model.getId())).withSelfRel().withTitle("Get By Id"));                     // link to Get
-            model.add(linkTo(methodOn(BrandController.class).getAll()).withSelfRel().withTitle("Get All"));                                 // link to Get All
+            model.add(linkTo(methodOn(CarBrandController.class).get(model.getId())).withSelfRel().withTitle("Get By Id"));                     // link to Get
+            model.add(linkTo(methodOn(CarBrandController.class).getAll()).withSelfRel().withTitle("Get All"));                                 // link to Get All
         }
 
         if (addCreate) {
-            model.add(linkTo(methodOn(BrandController.class).create(model)).withSelfRel().withTitle("Create"));                             // link to Create
+            model.add(linkTo(methodOn(CarBrandController.class).create(model)).withSelfRel().withTitle("Create"));                             // link to Create
         }
 
         if (addUpdate) {
-            model.add(linkTo(methodOn(BrandController.class).update(model.getId(), model)).withSelfRel().withTitle("Update By ID & Body"));  // link to Update
+            model.add(linkTo(methodOn(CarBrandController.class).update(model.getId(), model)).withSelfRel().withTitle("Update By ID & Body"));  // link to Update
         }
 
         if (addDelete) {
-            model.add(linkTo(methodOn(BrandController.class).deleteById(model.getId())).withSelfRel().withTitle("Delete By Id"));           // link to Delete by ID
+            model.add(linkTo(methodOn(CarBrandController.class).deleteById(model.getId())).withSelfRel().withTitle("Delete By Id"));           // link to Delete by ID
         }
 
         return model;

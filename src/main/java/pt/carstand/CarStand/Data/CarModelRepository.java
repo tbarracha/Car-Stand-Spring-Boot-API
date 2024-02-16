@@ -3,8 +3,11 @@ package pt.carstand.CarStand.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import pt.carstand.CarStand.Models.Cars.CarBrand;
+import pt.carstand.CarStand.Models.Cars.CarModel;
 
-public interface BrandRepository extends JpaRepository<CarBrand, Long> {
+public interface CarModelRepository extends JpaRepository<CarModel, Long> {
     @Query
-    CarBrand findByName(String name);
+    CarModel findByName(String name);
+
+
 }
