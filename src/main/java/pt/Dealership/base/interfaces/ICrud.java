@@ -1,4 +1,4 @@
-package pt.Dealership.Core.interfaces;
+package pt.Dealership.base.interfaces;
 
 public interface ICrud<T, Key> {
 

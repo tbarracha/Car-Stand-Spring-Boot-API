@@ -2,8 +2,8 @@ package pt.Dealership.Vehicles.Cars.Models;
 
 import jakarta.persistence.*;
 import org.springframework.hateoas.RepresentationModel;
-import pt.Dealership.Core.interfaces.IIdentifiable;
-import pt.Dealership.Core.interfaces.INameable;
+import pt.Dealership.base.interfaces.IIdentifiable;
+import pt.Dealership.base.interfaces.INameable;
 
 @Entity
 public class CarBrand extends RepresentationModel<CarBrand> implements IIdentifiable<Long>, INameable {

@@ -1,8 +1,8 @@
-package pt.Dealership.Core.controllers;
+package pt.Dealership.base.controllers;
 
 
 import org.springframework.hateoas.RepresentationModel;
-import pt.Dealership.Core.interfaces.ICrud;
+import pt.Dealership.base.interfaces.ICrud;
 
 import java.util.List;
 

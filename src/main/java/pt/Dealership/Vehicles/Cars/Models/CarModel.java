@@ -9,12 +9,11 @@ public class CarModel extends RepresentationModel<CarModel> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
+    @Column(unique = true)
+    String name;
 
     @OneToOne
     CarBrand brand;
-
-    @Column(unique = true)
-    String name;
 
     public CarModel() {
 
