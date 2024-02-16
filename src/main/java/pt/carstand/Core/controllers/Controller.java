@@ -1,4 +1,4 @@
-package pt.carstand.CarStand.Controllers;
+package pt.carstand.Core.controllers;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.RepresentationModel;

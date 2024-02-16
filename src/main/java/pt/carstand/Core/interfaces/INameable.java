@@ -1,4 +1,4 @@
-package pt.carstand.CarStand.Models.Interfaces;
+package pt.carstand.Core.interfaces;
 
 public interface INameable {
     String getName();

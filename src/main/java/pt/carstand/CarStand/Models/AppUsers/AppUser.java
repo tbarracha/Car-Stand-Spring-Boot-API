@@ -2,8 +2,8 @@ package pt.carstand.CarStand.Models.AppUsers;
 
 import jakarta.persistence.*;
 import org.springframework.hateoas.RepresentationModel;
-import pt.carstand.CarStand.Models.Interfaces.IIdentifiable;
-import pt.carstand.CarStand.Models.Interfaces.INameable;
+import pt.carstand.Core.interfaces.IIdentifiable;
+import pt.carstand.Core.interfaces.INameable;
 
 @Entity
 public class AppUser extends RepresentationModel<AppUser> implements IIdentifiable<Long>, INameable {
