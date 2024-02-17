@@ -1,4 +1,4 @@
-package pt.Dealership.Vehicles.VehicleTypes;
+package pt.Dealership.Vehicles.VehicleStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,27 +10,27 @@ import pt.Common.controllers.ControllerBase;
 import pt.Common.entities.GenericDTO;
 
 @RestController
-@RequestMapping("/api/vehicle/type")
-public class VehicleTypeController extends ControllerBase<VehicleType, Long, VehicleTypeService> {
+@RequestMapping("/api/vehicle/status")
+public class VehicleStatusController extends ControllerBase<VehicleStatus, Long, VehicleStatusService> {
 
     @Autowired
-    private VehicleTypeService service;
+    private VehicleStatusService service;
 
     @Override
-    protected VehicleTypeService getService() {
+    protected VehicleStatusService getService() {
         return service;
     }
 
     @Override
     protected void populate() {
-        service.create(new VehicleType("car"));
-        service.create(new VehicleType("motorbike"));
+        service.create(new VehicleStatus("car"));
+        service.create(new VehicleStatus("motorbike"));
     }
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
-    public ResponseEntity<GenericDTO<VehicleType>> getByName(@PathVariable("name") String name) {
-        VehicleType entity = service.getByName(name);
-        GenericDTO<VehicleType> dto = addLinks(entity, true, true, true, true);
+    public ResponseEntity<GenericDTO<VehicleStatus>> getByName(@PathVariable("name") String name) {
+        VehicleStatus entity = service.getByName(name);
+        GenericDTO<VehicleStatus> dto = addLinks(entity, true, true, true, true);
         return httpOkOrNotFound(dto);
     }
 }
