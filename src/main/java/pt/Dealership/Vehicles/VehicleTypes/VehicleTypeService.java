@@ -20,7 +20,7 @@ public class VehicleTypeService extends ServiceBase<VehicleType, Long, VehicleTy
 
     }
 
-    public VehicleType getByType(String type) {
-        return repository.findByType(type).orElse(null);
+    public VehicleType getByName(String name) {
+        return repository.findByName(name).orElse(null);
     }
 }

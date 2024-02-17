@@ -3,7 +3,7 @@ package pt.Common.entities;
 import org.springframework.hateoas.RepresentationModel;
 
 /**
- * Generic DTO for web transfer & link hold. To hide Entity Properties, mark the properties to hide with @Transient
+ * Generic DTO for web transfer & link data. To hide sensitive Entity Properties (ex: password), mark with @Transient on top of that property
  * @param <T> Entity Type
  */
 public class GenericDTO<T> extends RepresentationModel<GenericDTO<T>> {

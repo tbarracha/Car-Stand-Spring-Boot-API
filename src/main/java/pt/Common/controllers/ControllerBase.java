@@ -84,16 +84,16 @@ public abstract class ControllerBase<T, Key, S extends ServiceBaseParent<T, Key>
 
     // HTTP Response Entities
     // ------------------------------------------------------------------------------------------
-    protected ResponseEntity<GenericDTO<T>> httpCreatedOrNotAcceptable(GenericDTO<T> model) {
-        if (model != null)
-            return new ResponseEntity<>(model, HttpStatus.CREATED);
+    protected ResponseEntity<GenericDTO<T>> httpCreatedOrNotAcceptable(GenericDTO<T> dto) {
+        if (dto != null)
+            return new ResponseEntity<>(dto, HttpStatus.CREATED);
         else
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
-    protected ResponseEntity<GenericDTO<T>> httpOkOrNotFound(GenericDTO<T> model) {
-        if (model != null)
-            return new ResponseEntity<>(model, HttpStatus.OK);
+    protected ResponseEntity<GenericDTO<T>> httpOkOrNotFound(GenericDTO<T> dto) {
+        if (dto != null)
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

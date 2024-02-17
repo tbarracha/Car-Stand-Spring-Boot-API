@@ -9,25 +9,46 @@ public class VehicleType extends EntityBase<VehicleType> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String type;
+    @Column(nullable = false, unique = true)
+    private String name;
 
     public VehicleType() {
     }
 
-    public VehicleType(String type) {
-        this.type = type;
+    public VehicleType(String name) {
+        this.name = name;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 }
+
+/*
+package pt.Dealership.Vehicles.VehicleTypes;
+
+import jakarta.persistence.*;
+import pt.Dealership.Models.NamedEntity;
+
+@Entity
+public class VehicleType extends NamedEntity<VehicleType> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    public VehicleType() {
+    }
+
+    public VehicleType(String name) {
+        super(name);
+    }
+}
+*/

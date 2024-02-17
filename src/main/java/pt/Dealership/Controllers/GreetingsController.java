@@ -1,4 +1,4 @@
-package pt.Common.controllers;
+package pt.Dealership.Controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
