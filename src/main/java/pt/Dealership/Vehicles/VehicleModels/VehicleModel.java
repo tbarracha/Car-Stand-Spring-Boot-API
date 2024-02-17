@@ -13,7 +13,7 @@ public class VehicleModel extends EntityBase<VehicleModel> {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToOne
+    @ManyToOne
     private VehicleBrand brand;
 
     public VehicleModel() {

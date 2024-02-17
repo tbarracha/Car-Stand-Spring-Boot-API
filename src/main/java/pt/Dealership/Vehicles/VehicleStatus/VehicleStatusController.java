@@ -23,8 +23,10 @@ public class VehicleStatusController extends ControllerBase<VehicleStatus, Long,
 
     @Override
     protected void populate() {
-        getService().create(new VehicleStatus("car"));
-        getService().create(new VehicleStatus("motorbike"));
+        getService().create(new VehicleStatus("Unknown"));
+        getService().create(new VehicleStatus("Avaliable"));
+        getService().create(new VehicleStatus("Sold"));
+        getService().create(new VehicleStatus("In Repair"));
     }
 
     @GetMapping(value = "/name/{name}", produces = "application/json")

@@ -23,8 +23,11 @@ public class VehicleTypeController extends ControllerBase<VehicleType, Long, Veh
 
     @Override
     protected void populate() {
-        getService().create(new VehicleType("car"));
-        getService().create(new VehicleType("motorbike"));
+        getService().create(new VehicleType("Car"));
+        getService().create(new VehicleType("Motorbike"));
+        getService().create(new VehicleType("Truck"));
+        getService().create(new VehicleType("Van"));
+        getService().create(new VehicleType("SUV"));
     }
 
     @GetMapping(value = "/name/{name}", produces = "application/json")

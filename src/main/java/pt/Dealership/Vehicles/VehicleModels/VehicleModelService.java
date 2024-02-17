@@ -27,7 +27,7 @@ public class VehicleModelService extends ServiceBase<VehicleModel, Long, Vehicle
 
     }
 
-    public VehicleModel create(long brandId, String name) {
+    public VehicleModel create(Long brandId, String name) {
         var brand = brandService.getById(brandId);
         var model = new VehicleModel(brand, name);
 

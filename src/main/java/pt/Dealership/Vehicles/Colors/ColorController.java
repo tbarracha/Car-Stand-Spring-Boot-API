@@ -22,7 +22,13 @@ public class ColorController extends ControllerBase<Color, Long, ColorService> {
         getService().create("White", "#FFFFFF");
         getService().create("Black", "#000000");
         getService().create("Gray", "#808080");
+
         getService().create("Red", "#FF0000");
+        getService().create("Orange", "#FFA500");
+        getService().create("Yellow", "#FFFF00");
+        getService().create("Green", "#008000");
         getService().create("Blue", "#0000FF");
+        getService().create("Indigo", "#4B0082");
+        getService().create("Violet", "#EE82EE");
     }
 }

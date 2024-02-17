@@ -6,7 +6,7 @@ import pt.Common.entities.EntityBase;
 @Entity
 public class VehicleBrand extends EntityBase<VehicleBrand> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Column(nullable = false, unique = true)

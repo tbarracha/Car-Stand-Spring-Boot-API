@@ -18,4 +18,6 @@ public abstract class Vehicle {
     private Color color;
     private VehicleStatus status;
     private VehicleCondition condition;
+
+    private double price;
 }

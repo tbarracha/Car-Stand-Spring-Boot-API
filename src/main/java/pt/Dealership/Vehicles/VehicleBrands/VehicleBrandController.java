@@ -26,8 +26,18 @@ public class VehicleBrandController extends ControllerBase<VehicleBrand, Long, V
         getService().create(new VehicleBrand("Audi"));
         getService().create(new VehicleBrand("BMW"));
         getService().create(new VehicleBrand("Tesla"));
-        getService().create(new VehicleBrand("Volco"));
+        getService().create(new VehicleBrand("Volvo"));
+        getService().create(new VehicleBrand("Toyota"));
+        getService().create(new VehicleBrand("Mercedes-Benz"));
+        getService().create(new VehicleBrand("Ford"));
+        getService().create(new VehicleBrand("Chevrolet"));
+        getService().create(new VehicleBrand("Honda"));
+        getService().create(new VehicleBrand("Hyundai"));
+        getService().create(new VehicleBrand("Volkswagen"));
+        getService().create(new VehicleBrand("Nissan"));
+        getService().create(new VehicleBrand("Subaru"));
     }
+
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
     public ResponseEntity<GenericDTO<VehicleBrand>> getByName(@PathVariable("name") String name) {

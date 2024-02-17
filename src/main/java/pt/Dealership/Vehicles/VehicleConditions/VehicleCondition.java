@@ -38,24 +38,3 @@ public class VehicleCondition extends EntityBase<VehicleCondition> {
         this.name = name;
     }
 }
-
-/*
-package pt.Dealership.Vehicles.VehicleTypes;
-
-import jakarta.persistence.*;
-import pt.Dealership.Models.NamedEntity;
-
-@Entity
-public class VehicleType extends NamedEntity<VehicleType> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    public VehicleType() {
-    }
-
-    public VehicleType(String name) {
-        super(name);
-    }
-}
-*/

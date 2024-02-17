@@ -26,14 +26,74 @@ public class VehicleModelController extends ControllerBase<VehicleModel, Long, V
 
     @Override
     protected void populate() {
-        getService().create(1, "A1");
-        getService().create(1, "A2");
-        getService().create(1, "A3");
+        // Audi
+        getService().create((long) 1, "A1");
+        getService().create((long) 1, "A2");
+        getService().create((long) 1, "A3");
 
-        getService().create(2, "B1");
-        getService().create(2, "B2");
-        getService().create(2, "B3");
+        // BMW
+        getService().create((long) 2, "1 Series");
+        getService().create((long) 2, "2 Series");
+        getService().create((long) 2, "3 Series");
+
+        // Tesla
+        getService().create((long) 3, "Model S");
+        getService().create((long) 3, "Model 3");
+        getService().create((long) 3, "Model X");
+
+        // Volvo
+        getService().create((long) 4, "S60");
+        getService().create((long) 4, "XC40");
+        getService().create((long) 4, "XC90");
+
+        // Toyota
+        getService().create((long) 5, "Corolla");
+        getService().create((long) 5, "Camry");
+        getService().create((long) 5, "Rav4");
+
+        // Mercedes-Benz
+        getService().create((long) 6, "C-Class");
+        getService().create((long) 6, "E-Class");
+        getService().create((long) 6, "S-Class");
+
+        // Ford
+        getService().create((long) 7, "Fiesta");
+        getService().create((long) 7, "Focus");
+        getService().create((long) 7, "Mustang");
+
+        // Chevrolet
+        getService().create((long) 8, "Camaro");
+        getService().create((long) 8, "Silverado");
+        getService().create((long) 8, "Malibu");
+
+        // Honda
+        getService().create((long) 9, "Civic");
+        getService().create((long) 9, "Accord");
+        getService().create((long) 9, "CR-V");
+
+        // Hyundai
+        getService().create((long) 10, "Elantra");
+        getService().create((long) 10, "Sonata");
+        getService().create((long) 10, "Tucson");
+
+        // Volkswagen
+        getService().create((long) 11, "Golf");
+        getService().create((long) 11, "Passat");
+        getService().create((long) 11, "Tiguan");
+
+        // Nissan
+        getService().create((long) 12, "Altima");
+        getService().create((long) 12, "Maxima");
+        getService().create((long) 12, "Rogue");
+
+        // Subaru
+        getService().create((long) 13, "Impreza");
+        getService().create((long) 13, "Outback");
+        getService().create((long) 13, "Forester");
     }
+
+
+
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
     public ResponseEntity<GenericDTO<VehicleModel>> getByName(@PathVariable("name") String name) {

@@ -23,8 +23,9 @@ public class VehicleConditionController extends ControllerBase<VehicleCondition,
 
     @Override
     protected void populate() {
-        getService().create(new VehicleCondition("car"));
-        getService().create(new VehicleCondition("motorbike"));
+        getService().create(new VehicleCondition("New"));
+        getService().create(new VehicleCondition("Used"));
+        getService().create(new VehicleCondition("Refurbished"));
     }
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
