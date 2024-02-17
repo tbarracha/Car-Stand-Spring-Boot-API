@@ -8,6 +8,6 @@ import pt.Dealership.base.interfaces.ICrud;
  * @param <T> model type (ex: brand, car, etc)
  * @param <Key> primary key
  */
-public abstract class ServiceBaseParent<T extends RepresentationModel<T>, Key>  implements ICrud<T, Key> {
+public abstract class ServiceBaseParent<T, Key>  implements ICrud<T, Key> {
 
 }

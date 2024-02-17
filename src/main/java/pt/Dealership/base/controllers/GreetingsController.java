@@ -1,4 +1,4 @@
-package pt.Dealership.Vehicles.Cars.Controllers;
+package pt.Dealership.base.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

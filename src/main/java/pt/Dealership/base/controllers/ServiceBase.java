@@ -13,7 +13,7 @@ import java.util.Optional;
  * @param <Key> primary key
  * @param <R> repository
  */
-public abstract class ServiceBase<T extends RepresentationModel<T>, Key, R extends JpaRepository<T, Key>> extends ServiceBaseParent<T, Key> {
+public abstract class ServiceBase<T, Key, R extends JpaRepository<T, Key>> extends ServiceBaseParent<T, Key> {
 
     // auto wire a private repository in the child class, and override this method to get thae autowired repo
     protected abstract R getRepository();
