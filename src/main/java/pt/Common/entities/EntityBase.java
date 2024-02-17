@@ -1,6 +1,6 @@
-package pt.Dealership.base.models;
+package pt.Common.entities;
 
-import pt.Dealership.base.interfaces.IDTOable;
+import pt.Common.interfaces.IDTOable;
 
 public abstract class EntityBase<T> implements IDTOable<EntityBase<T>> {
 

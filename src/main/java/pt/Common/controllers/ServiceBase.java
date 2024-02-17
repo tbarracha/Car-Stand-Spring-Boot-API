@@ -1,8 +1,6 @@
-package pt.Dealership.base.controllers;
+package pt.Common.controllers;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.hateoas.RepresentationModel;
-import pt.Dealership.base.interfaces.ICrud;
 
 import java.util.List;
 import java.util.Optional;

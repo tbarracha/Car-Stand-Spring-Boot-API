@@ -1,4 +1,4 @@
-package pt.Dealership.base.interfaces;
+package pt.Common.interfaces;
 
 /**
  * Interface with common CRUD operations

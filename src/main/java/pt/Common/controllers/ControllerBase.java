@@ -1,11 +1,11 @@
-package pt.Dealership.base.controllers;
+package pt.Common.controllers;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pt.Dealership.base.models.GenericDTO;
+import pt.Common.entities.GenericDTO;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

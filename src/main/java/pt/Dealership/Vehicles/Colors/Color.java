@@ -1,7 +1,7 @@
-package pt.Dealership.Generic.Colors;
+package pt.Dealership.Vehicles.Colors;
 
 import jakarta.persistence.*;
-import pt.Dealership.base.models.EntityBase;
+import pt.Common.entities.EntityBase;
 
 @Entity
 public class Color extends EntityBase<Color> {

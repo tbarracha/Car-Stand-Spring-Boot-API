@@ -1,9 +1,9 @@
-package pt.Dealership.Generic.Colors;
+package pt.Dealership.Vehicles.Colors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pt.Dealership.base.controllers.ControllerBase;
+import pt.Common.controllers.ControllerBase;
 
 @RestController
 @RequestMapping("api/color")

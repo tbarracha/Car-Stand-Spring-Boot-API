@@ -1,7 +1,6 @@
-package pt.Dealership.base.controllers;
+package pt.Common.controllers;
 
-import org.springframework.hateoas.RepresentationModel;
-import pt.Dealership.base.interfaces.ICrud;
+import pt.Common.interfaces.ICrud;
 
 /**
  * Parent class for ServiceBase, so we can reference this as type in the ControllerBase

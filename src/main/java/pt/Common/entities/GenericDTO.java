@@ -1,4 +1,4 @@
-package pt.Dealership.base.models;
+package pt.Common.entities;
 
 import org.springframework.hateoas.RepresentationModel;
 

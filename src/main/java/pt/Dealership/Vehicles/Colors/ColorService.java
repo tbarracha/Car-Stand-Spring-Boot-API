@@ -1,8 +1,8 @@
-package pt.Dealership.Generic.Colors;
+package pt.Dealership.Vehicles.Colors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pt.Dealership.base.controllers.ServiceBase;
+import pt.Common.controllers.ServiceBase;
 
 @Service
 public class ColorService extends ServiceBase<Color, Long, ColorRepository> {
