@@ -6,73 +6,29 @@ import pt.Dealership.base.controllers.ServiceBase;
 import pt.Dealership.Vehicles.Cars.Data.CarBrandRepository;
 import pt.Dealership.Vehicles.Cars.Models.CarBrand;
 
-import java.util.List;
 
 @Service
-public class CarBrandService extends ServiceBase<CarBrand, Long> {
+public class CarBrandService extends ServiceBase<CarBrand, Long, CarBrandRepository> {
 
     @Autowired
     private CarBrandRepository repository;
 
-    // Getters
-    public boolean exists(Long id) {
-        return repository.existsById(id);
-    }
-
-    public CarBrand getById(Long id) {
-        return repository.findById(id).orElse(null);
+    @Override
+    public CarBrandRepository getRepository() {
+        return repository;
     }
 
     public CarBrand getByName(String name) {
         return repository.findByName(name).orElse(null);
     }
 
-    public List<CarBrand> getAll() {
-        return repository.findAll();
-    }
-
-
-    // Create & Update
     public CarBrand create(String name) {
-        try {
-            CarBrand brand = new CarBrand(name);
-            return repository.save(brand);
-        } catch (Exception e) {
-            System.out.println("Car brand already exists!");
-            return getByName(name);
-        }
+        CarBrand brand = new CarBrand(name);
+        return create(brand);
     }
 
-    public CarBrand create(CarBrand brand) {
-        try {
-            return repository.save(brand);
-        } catch (Exception e) {
-            System.out.println("Car brand already exists!");
-            return getByName(brand.getName());
-        }
-    }
+    @Override
+    protected void updateEntityProperties(CarBrand body, CarBrand entity) {
 
-    public CarBrand update(Long id, CarBrand brand) {
-
-        CarBrand targetBrand = getById(id);
-
-        if (targetBrand != null) {
-            targetBrand.setName(brand.getName());
-            repository.save(targetBrand);
-        }
-
-        return targetBrand;
-    }
-
-
-    // Delete
-    public CarBrand delete(Long id) {
-        CarBrand targetBrand = getById(id);
-
-        if (targetBrand != null) {
-            repository.delete(targetBrand);
-        }
-
-        return targetBrand;
     }
 }

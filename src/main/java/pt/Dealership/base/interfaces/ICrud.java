@@ -1,5 +1,10 @@
 package pt.Dealership.base.interfaces;
 
+/**
+ * Interface with common CRUD operations
+ * @param <T> model type (ex: brand, car, etc)
+ * @param <Key> primary key
+ */
 public interface ICrud<T, Key> {
 
     T getById(Key id);

@@ -13,6 +13,11 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * Base class for all Controller Classes with common CRUD operations
+ * @param <T> model type (ex: brand, car, etc)
+ * @param <Key> primary key
+ */
 public abstract class ControllerBase<T extends RepresentationModel<T>, Key> { //implements ICrud<ResponseEntity<T>, Key> {
 
     // Public API

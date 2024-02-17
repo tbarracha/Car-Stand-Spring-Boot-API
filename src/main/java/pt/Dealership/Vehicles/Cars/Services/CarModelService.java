@@ -10,7 +10,7 @@ import pt.Dealership.Vehicles.Cars.Models.CarModel;
 import java.util.List;
 
 @Service
-public class CarModelService extends ServiceBase<CarModel, Long> {
+public class CarModelService extends ServiceBase<CarModel, Long, CarModelRepository> {
 
     @Autowired
     private CarModelRepository repository;
@@ -18,22 +18,13 @@ public class CarModelService extends ServiceBase<CarModel, Long> {
     @Autowired
     private CarBrandService brandService;
 
-
-    // Getters
-    public boolean exists(Long id) {
-        return repository.existsById(id);
-    }
-
-    public CarModel getById(Long id) {
-        return repository.findById(id).orElse(null);
+    @Override
+    protected CarModelRepository getRepository() {
+        return repository;
     }
 
     public CarModel getByName(String name) {
         return repository.findByName(name).orElse(null);
-    }
-
-    public List<CarModel> getAll() {
-        return repository.findAll();
     }
 
 
@@ -50,36 +41,8 @@ public class CarModelService extends ServiceBase<CarModel, Long> {
         return create(model);
     }
 
-    public CarModel create(CarModel model) {
-        try {
-            return repository.save(model);
-        } catch (Exception e) {
-            System.out.println("Car model already exists!");
-            return getByName(model.getName());
-        }
-    }
+    @Override
+    protected void updateEntityProperties(CarModel body, CarModel entity) {
 
-    public CarModel update(Long id, CarModel model) {
-
-        CarModel targetModel = getById(id);
-
-        if (targetModel != null) {
-            targetModel.setName(model.getName());
-            repository.save(targetModel);
-        }
-
-        return targetModel;
-    }
-
-
-    // Delete
-    public CarModel delete(Long id) {
-        CarModel targetModel = getById(id);
-
-        if (targetModel != null) {
-            repository.delete(targetModel);
-        }
-
-        return targetModel;
     }
 }
