@@ -23,14 +23,16 @@ public class VehicleBrandController extends ControllerBase<VehicleBrand, Long, V
 
     @Override
     protected void populate() {
-        service.create(new VehicleBrand("car"));
-        service.create(new VehicleBrand("motorbike"));
+        getService().create(new VehicleBrand("Audi"));
+        getService().create(new VehicleBrand("BMW"));
+        getService().create(new VehicleBrand("Tesla"));
+        getService().create(new VehicleBrand("Volco"));
     }
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
     public ResponseEntity<GenericDTO<VehicleBrand>> getByName(@PathVariable("name") String name) {
-        VehicleBrand entity = service.getByName(name);
-        GenericDTO<VehicleBrand> dto = addLinks(entity, true, true, true, true);
+        VehicleBrand entity = getService().getByName(name);
+        GenericDTO<VehicleBrand> dto = addAllLinks(entity);
         return httpOkOrNotFound(dto);
     }
 }

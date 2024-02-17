@@ -29,6 +29,13 @@ public class Color extends EntityBase<Color> {
         this.hexadecimal = hexadecimal;
     }
 
+    static final class Queries {
+        public static final String FIND_BY_NAME = "SELECT entity FROM Color entity WHERE LOWER(entity.name) = LOWER(:name)";
+        public static final String FIND_WITH_FIRST_LETTER = "SELECT entity FROM Color entity WHERE LOWER(entity.name) LIKE CONCAT(:letter, '%')";
+        public static final String FIND_CONTAINING = "SELECT entity FROM Color entity WHERE LOWER(entity.name) LIKE CONCAT('%', LOWER(:keyword), '%')";
+        public static final String FIND_BY_HEXADECIMAL = "SELECT entity FROM Color entity WHERE LOWER(entity.hexadecimal) = LOWER(:hexadecimal)";
+    }
+
     public Long getId() {
         return id;
     }

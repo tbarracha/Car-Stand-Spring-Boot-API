@@ -19,6 +19,13 @@ public class VehicleBrand extends EntityBase<VehicleBrand> {
         this.name = name;
     }
 
+    public class Queries {
+        public static final String FIND_BY_NAME = "SELECT entity FROM VehicleBrand entity WHERE LOWER(entity.name) = LOWER(:name)";
+        public static final String FIND_BY_FIRST_LETTER = "SELECT entity FROM VehicleBrand entity WHERE LOWER(entity.name) LIKE CONCAT(:letter, '%')";
+        public static final String FIND_CONTAINING = "SELECT entity FROM VehicleBrand entity WHERE LOWER(entity.name) LIKE CONCAT('%', LOWER(:keyword), '%')";
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -31,24 +38,3 @@ public class VehicleBrand extends EntityBase<VehicleBrand> {
         this.name = name;
     }
 }
-
-/*
-package pt.Dealership.Vehicles.VehicleTypes;
-
-import jakarta.persistence.*;
-import pt.Dealership.Models.NamedEntity;
-
-@Entity
-public class VehicleType extends NamedEntity<VehicleType> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    public VehicleType() {
-    }
-
-    public VehicleType(String name) {
-        super(name);
-    }
-}
-*/

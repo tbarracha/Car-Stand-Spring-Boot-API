@@ -23,14 +23,14 @@ public class VehicleTypeController extends ControllerBase<VehicleType, Long, Veh
 
     @Override
     protected void populate() {
-        service.create(new VehicleType("car"));
-        service.create(new VehicleType("motorbike"));
+        getService().create(new VehicleType("car"));
+        getService().create(new VehicleType("motorbike"));
     }
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
     public ResponseEntity<GenericDTO<VehicleType>> getByName(@PathVariable("name") String name) {
-        VehicleType entity = service.getByName(name);
-        GenericDTO<VehicleType> dto = addLinks(entity, true, true, true, true);
+        VehicleType entity = getService().getByName(name);
+        GenericDTO<VehicleType> dto = addAllLinks(entity);
         return httpOkOrNotFound(dto);
     }
 }

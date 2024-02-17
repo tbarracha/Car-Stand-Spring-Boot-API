@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.Common.controllers.ServiceBase;
 
+import java.util.List;
+
 @Service
 public class VehicleBrandService extends ServiceBase<VehicleBrand, Long, VehicleBrandRepository> {
 
@@ -22,5 +24,9 @@ public class VehicleBrandService extends ServiceBase<VehicleBrand, Long, Vehicle
 
     public VehicleBrand getByName(String name) {
         return repository.findByName(name).orElse(null);
+    }
+
+    public List<VehicleBrand> getByLetterStart(String letter) {
+        return repository.findByFirstLetter(letter);
     }
 }

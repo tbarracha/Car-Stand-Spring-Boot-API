@@ -23,14 +23,14 @@ public class VehicleStatusController extends ControllerBase<VehicleStatus, Long,
 
     @Override
     protected void populate() {
-        service.create(new VehicleStatus("car"));
-        service.create(new VehicleStatus("motorbike"));
+        getService().create(new VehicleStatus("car"));
+        getService().create(new VehicleStatus("motorbike"));
     }
 
     @GetMapping(value = "/name/{name}", produces = "application/json")
     public ResponseEntity<GenericDTO<VehicleStatus>> getByName(@PathVariable("name") String name) {
-        VehicleStatus entity = service.getByName(name);
-        GenericDTO<VehicleStatus> dto = addLinks(entity, true, true, true, true);
+        VehicleStatus entity = getService().getByName(name);
+        GenericDTO<VehicleStatus> dto = addAllLinks(entity);
         return httpOkOrNotFound(dto);
     }
 }
