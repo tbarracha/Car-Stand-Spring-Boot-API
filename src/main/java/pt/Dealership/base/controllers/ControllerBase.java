@@ -1,10 +1,15 @@
 package pt.Dealership.base.controllers;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,20 +22,49 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * Base class for all Controller Classes with common CRUD operations
  * @param <T> model type (ex: brand, car, etc)
  * @param <Key> primary key
+ * @param <S> service
  */
-public abstract class ControllerBase<T extends RepresentationModel<T>, Key> { //implements ICrud<ResponseEntity<T>, Key> {
+public abstract class ControllerBase<T extends RepresentationModel<T>, Key, S extends ServiceBaseParent<T, Key>> { //implements ICrud<ResponseEntity<T>, Key> {
+
+    protected abstract S getService();
 
     // Public API
     // ==============================================================================================================
-    public abstract ResponseEntity<T> getById(Key id);
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<T> getById(Key id) {
+        var entity = getService().getById(id);
+        entity = addLinks(entity, true, true, true, true);
+        return httpOkOrNotFound(entity);
+    }
 
-    public abstract CollectionModel<T> getAll();
+    @GetMapping(produces = "application/json")
+    public CollectionModel<T> getAll()  {
+        var entityList = getService().getAll();
+        CollectionModel<T> collectionModel = CollectionModel.of(entityList);
+        collectionModel = addLinks(collectionModel, true, true);
+        return collectionModel;
+    }
 
-    public abstract ResponseEntity<T> create(T body);
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<T> create(T body) {
+        var entity = getService().create(body);
+        entity = addLinks(entity, true, true, true, true);
+        return httpCreatedOrNotAcceptable(entity);
+    }
 
-    public abstract ResponseEntity<T> update(Key id, T body);
+    @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<T> update(Key id, T body) {
+        var entity = getService().update(id, body);
+        entity = addLinks(entity, true, true, true, true);
+        return httpOkOrNotFound(entity);
+    }
 
-    public abstract ResponseEntity<T> delete(Key id);
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<T> delete(Key id) {
+        var entity = getService().delete(id);
+        entity = addLinks(entity, true, true, false, false);
+        return httpOkOrNotFound(entity);
+    }
 
 
 
