@@ -4,11 +4,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import pt.Dealership.base.dto.GenericDTO;
+import org.springframework.web.bind.annotation.*;
+import pt.Dealership.base.models.GenericDTO;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -30,7 +27,7 @@ public abstract class ControllerBase<T, Key, S extends ServiceBaseParent<T, Key>
     // Public API
     // ==============================================================================================================
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<GenericDTO<T>> getById(Key id) {
+    public ResponseEntity<GenericDTO<T>> getById(@PathVariable("id") Key id) {
         var entity = getService().getById(id);
         var dto = addLinks(entity, true, true, true, true);
         return httpOkOrNotFound(dto);
@@ -45,26 +42,44 @@ public abstract class ControllerBase<T, Key, S extends ServiceBaseParent<T, Key>
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<GenericDTO<T>> create(T body) {
+    public ResponseEntity<GenericDTO<T>> create(@RequestBody T body) {
         var entity = getService().create(body);
         var dto = addLinks(entity, true, true, true, true);
         return httpCreatedOrNotAcceptable(dto);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<GenericDTO<T>> update(Key id, T body) {
+    public ResponseEntity<GenericDTO<T>> update(@PathVariable("id") Key id, @RequestBody T body) {
         var entity = getService().update(id, body);
         var dto = addLinks(entity, true, true, true, true);
         return httpOkOrNotFound(dto);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<GenericDTO<T>> delete(Key id) {
+    public ResponseEntity<GenericDTO<T>> delete(@PathVariable("id") Key id) {
         var entity = getService().delete(id);
         var dto = addLinks(entity, true, true, false, false);
         return httpOkOrNotFound(dto);
     }
 
+
+    // HTTP Populate
+    // ------------------------------------------------------------------------------------------
+    private boolean isPopulated;
+
+    @PostMapping(value = "/populate", produces = "application/json")
+    public ResponseEntity<String> tryPopulate() {
+        if (isPopulated) {
+            return new ResponseEntity<>("Already Populated!", HttpStatus.OK);
+        }
+
+        populate();
+        isPopulated = true;
+
+        return new ResponseEntity<>("Populated!", HttpStatus.CREATED);
+    }
+
+    protected abstract void populate();
 
 
     // HTTP Response Entities
