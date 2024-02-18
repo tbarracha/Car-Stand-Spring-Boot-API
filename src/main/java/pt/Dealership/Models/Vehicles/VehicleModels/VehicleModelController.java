@@ -1,6 +1,7 @@
 package pt.Dealership.Models.Vehicles.VehicleModels;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import pt.Common.entities.GenericDTO;
 
 import java.util.List;
 
+@Order(2)
 @RestController
 @RequestMapping("/api/vehicle/model")
 public class VehicleModelController extends ControllerBase<VehicleModel, Long, VehicleModelService> {
@@ -26,6 +28,10 @@ public class VehicleModelController extends ControllerBase<VehicleModel, Long, V
 
     @Override
     protected void populate() {
+        System.out.println(this.getClass().getSimpleName() + ", wont populate yet");
+    }
+
+    public void populateWithModels() {
         // Audi
         getService().create((long) 1, "A1");
         getService().create((long) 1, "A2");

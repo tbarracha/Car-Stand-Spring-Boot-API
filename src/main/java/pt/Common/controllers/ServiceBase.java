@@ -1,7 +1,6 @@
 package pt.Common.controllers;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pt.Common.interfaces.IKeyIdentifiable.IKeyIdentifiableRepository;
 
 import java.util.List;
 import java.util.Optional;

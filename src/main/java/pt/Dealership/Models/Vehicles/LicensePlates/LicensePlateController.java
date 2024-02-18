@@ -1,10 +1,12 @@
 package pt.Dealership.Models.Vehicles.LicensePlates;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pt.Common.controllers.ControllerBase;
 
+@Order(1)
 @RestController
 @RequestMapping("api/vehicle/license")
 public class LicensePlateController extends ControllerBase<LicensePlate, Long, LicensePlateService> {

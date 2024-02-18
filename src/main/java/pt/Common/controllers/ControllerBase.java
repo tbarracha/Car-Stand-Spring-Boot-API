@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.Common.entities.GenericDTO;
+import pt.Dealership.Controllers.GreetingsController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,7 @@ public abstract class ControllerBase<T, K, S extends ServiceBaseParent<T, K>> { 
         populate();
         isPopulated = true;
 
+        System.out.println(String.format("'%s' - was populated!", this.getClass().getSimpleName()));
         return getAll();
     }
 

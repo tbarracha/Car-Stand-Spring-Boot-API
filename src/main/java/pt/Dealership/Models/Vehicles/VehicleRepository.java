@@ -15,7 +15,11 @@ public interface VehicleRepository<T extends Vehicle> extends JpaRepository<T, S
     @Query
     Optional<T> findByVin(String vin);
 
+    @Query
     List<Vehicle> findByLicensePlate(LicensePlate licensePlate);
+    @Query
+    List<Vehicle> findByLicensePlateName(String licensePlateName);
+
     /*
     @Query("SELECT v FROM Vehicle v WHERE v.licensePlate.name = :licensePlate")
     List<Vehicle> findByLicensePlate(String licensePlate);

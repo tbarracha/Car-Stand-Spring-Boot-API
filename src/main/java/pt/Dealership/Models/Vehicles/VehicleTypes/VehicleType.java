@@ -1,6 +1,7 @@
 package pt.Dealership.Models.Vehicles.VehicleTypes;
 
 import jakarta.persistence.*;
+import org.springframework.core.annotation.Order;
 import pt.Dealership.Models.Vehicles.VehicleStringContentEntity;
 
 @Entity

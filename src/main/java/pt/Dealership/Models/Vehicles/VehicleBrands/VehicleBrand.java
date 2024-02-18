@@ -1,10 +1,12 @@
 package pt.Dealership.Models.Vehicles.VehicleBrands;
 
 import jakarta.persistence.*;
+import org.springframework.core.annotation.Order;
 import pt.Common.entities.LongIdNamedEntity;
 import pt.Dealership.Models.Vehicles.VehicleStatus.VehicleStatus;
 import pt.Dealership.Models.Vehicles.VehicleStringContentEntity;
 
+@Order(1)
 @Entity
 public class VehicleBrand extends VehicleStringContentEntity<VehicleStatus> {
     public VehicleBrand() {

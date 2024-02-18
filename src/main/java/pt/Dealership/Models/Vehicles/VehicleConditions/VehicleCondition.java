@@ -1,8 +1,10 @@
 package pt.Dealership.Models.Vehicles.VehicleConditions;
 
 import jakarta.persistence.*;
+import org.springframework.core.annotation.Order;
 import pt.Dealership.Models.Vehicles.VehicleStringContentEntity;
 
+@Order(3)
 @Entity
 public class VehicleCondition extends VehicleStringContentEntity<VehicleCondition> {
     public VehicleCondition() {
