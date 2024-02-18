@@ -26,8 +26,13 @@ public class VehicleModelService extends ServiceBase<VehicleModel, Long, Vehicle
 
     }
 
+    @Override
+    protected VehicleModel tryGetEntity(VehicleModel body) {
+        return null;
+    }
+
     public VehicleModel create(Long brandId, String name) {
-        var brand = brandService.getById(brandId);
+        var brand = brandService.findById(brandId);
         var model = new VehicleModel(brand, name);
 
         return create(model);

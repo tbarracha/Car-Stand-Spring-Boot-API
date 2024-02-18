@@ -20,7 +20,12 @@ public class LicensePlateService extends ServiceBase<LicensePlate, Long, License
 
     }
 
-    public LicensePlate getByName(String name) {
-        return repository.findByName(name).orElse(null);
+    @Override
+    protected LicensePlate tryGetEntity(LicensePlate body) {
+        return null;
+    }
+
+    public LicensePlate getByName(String content) {
+        return repository.findByName(content).orElse(null);
     }
 }

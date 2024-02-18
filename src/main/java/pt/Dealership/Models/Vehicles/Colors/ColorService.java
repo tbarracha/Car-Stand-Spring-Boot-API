@@ -3,6 +3,7 @@ package pt.Dealership.Models.Vehicles.Colors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.Common.controllers.ServiceBase;
+import pt.Dealership.Models.Cars.Car;
 
 @Service
 public class ColorService extends ServiceBase<Color, Long, ColorRepository> {
@@ -18,6 +19,11 @@ public class ColorService extends ServiceBase<Color, Long, ColorRepository> {
     @Override
     protected void updateEntityProperties(Color updatedBody, Color entityToUpdate) {
 
+    }
+
+    @Override
+    protected Color tryGetEntity(Color body) {
+        return null;
     }
 
     public Color create(String name, String hexadecimal) {

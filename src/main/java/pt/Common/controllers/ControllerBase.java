@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.Common.entities.GenericDTO;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,25 +16,25 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 /**
  * Base class for all Controller Classes with common CRUD operations
  * @param <T> model type (ex: brand, car, etc)
- * @param <Key> primary key
+ * @param <K> primary key
  * @param <S> service
  */
-public abstract class ControllerBase<T, Key, S extends ServiceBaseParent<T, Key>> { //implements ICrud<T, Key> {
+public abstract class ControllerBase<T, K, S extends ServiceBaseParent<T, K>> { //implements ICrud<T, Key> {
 
     protected abstract S getService();
 
     // Public API
     // ==============================================================================================================
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<GenericDTO<T>> getById(@PathVariable("id") Key id) {
-        var entity = getService().getById(id);
+    public ResponseEntity<GenericDTO<T>> getById(@PathVariable("id") K id) {
+        var entity = getService().findById(id);
         var dto = addAllLinks(entity);
         return httpOkOrNotFound(dto);
     }
 
     @GetMapping(produces = "application/json")
     public CollectionModel<T> getAll()  {
-        var entityList = getService().getAll();
+        var entityList = getService().findAll();
         CollectionModel<T> collectionModel = CollectionModel.of(entityList);
         collectionModel = addLinks(collectionModel, true, true);
         return collectionModel;
@@ -49,14 +48,14 @@ public abstract class ControllerBase<T, Key, S extends ServiceBaseParent<T, Key>
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<GenericDTO<T>> update(@PathVariable("id") Key id, @RequestBody T body) {
+    public ResponseEntity<GenericDTO<T>> update(@PathVariable("id") K id, @RequestBody T body) {
         var entity = getService().update(id, body);
         var dto = addAllLinks(entity);
         return httpOkOrNotFound(dto);
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<GenericDTO<T>> delete(@PathVariable("id") Key id) {
+    public ResponseEntity<GenericDTO<T>> delete(@PathVariable("id") K id) {
         var entity = getService().delete(id);
         var dto = addLinks(entity, true, true, false, false, false);
         return httpOkOrNotFound(dto);
@@ -118,7 +117,7 @@ public abstract class ControllerBase<T, Key, S extends ServiceBaseParent<T, Key>
 
             // Generate link for getById method if addGetters is true
             if (addGet) {
-                Link link = linkTo(methodOn(clazz).getById((Key) model.getClass().getMethod("getId").invoke(model))).withRel("getById");
+                Link link = linkTo(methodOn(clazz).getById((K) model.getClass().getMethod("getId").invoke(model))).withRel("getById");
                 links.add(link);
             }
 
@@ -136,13 +135,13 @@ public abstract class ControllerBase<T, Key, S extends ServiceBaseParent<T, Key>
 
             // Generate link for update method if addUpdate is true
             if (addUpdate) {
-                Link link = linkTo(methodOn(clazz).update((Key) model.getClass().getMethod("getId").invoke(model), model)).withRel("update");
+                Link link = linkTo(methodOn(clazz).update((K) model.getClass().getMethod("getId").invoke(model), model)).withRel("update");
                 links.add(link);
             }
 
             // Generate link for delete method if addDelete is true
             if (addDelete) {
-                Link link = linkTo(methodOn(clazz).delete((Key) model.getClass().getMethod("getId").invoke(model))).withRel("delete");
+                Link link = linkTo(methodOn(clazz).delete((K) model.getClass().getMethod("getId").invoke(model))).withRel("delete");
                 links.add(link);
             }
 

@@ -3,6 +3,7 @@ package pt.Dealership.Models.Vehicles.VehicleBrands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.Common.controllers.ServiceBase;
+import pt.Dealership.Models.Cars.Car;
 
 import java.util.List;
 
@@ -20,6 +21,11 @@ public class VehicleBrandService extends ServiceBase<VehicleBrand, Long, Vehicle
     @Override
     protected void updateEntityProperties(VehicleBrand updatedBody, VehicleBrand entityToUpdate) {
 
+    }
+
+    @Override
+    protected VehicleBrand tryGetEntity(VehicleBrand body) {
+        return null;
     }
 
     public VehicleBrand getByName(String name) {

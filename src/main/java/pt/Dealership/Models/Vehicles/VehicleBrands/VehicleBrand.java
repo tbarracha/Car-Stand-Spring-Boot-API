@@ -1,45 +1,23 @@
 package pt.Dealership.Models.Vehicles.VehicleBrands;
 
 import jakarta.persistence.*;
-import pt.Common.entities.EntityBase;
+import pt.Common.entities.LongIdNamedEntity;
+import pt.Dealership.Models.Vehicles.VehicleStatus.VehicleStatus;
+import pt.Dealership.Models.Vehicles.VehicleStringContentEntity;
 
 @Entity
-public class VehicleBrand extends EntityBase<VehicleBrand> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String name;
-
+public class VehicleBrand extends VehicleStringContentEntity<VehicleStatus> {
     public VehicleBrand() {
+        super();
     }
 
     public VehicleBrand(String name) {
-        this.name = name;
+        super(name);
     }
 
-    public VehicleBrand(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public class Queries {
+    static final class Queries {
         public static final String FIND_BY_NAME = "SELECT entity FROM VehicleBrand entity WHERE LOWER(entity.name) = LOWER(:name)";
-        public static final String FIND_BY_FIRST_LETTER = "SELECT entity FROM VehicleBrand entity WHERE LOWER(entity.name) LIKE CONCAT(:letter, '%')";
+        public static final String FIND_WITH_FIRST_LETTER = "SELECT entity FROM VehicleBrand entity WHERE LOWER(entity.name) LIKE CONCAT(:letter, '%')";
         public static final String FIND_CONTAINING = "SELECT entity FROM VehicleBrand entity WHERE LOWER(entity.name) LIKE CONCAT('%', LOWER(:keyword), '%')";
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

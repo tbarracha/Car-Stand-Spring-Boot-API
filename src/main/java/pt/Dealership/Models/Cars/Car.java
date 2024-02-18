@@ -15,18 +15,11 @@ import pt.Dealership.Models.Vehicles.VehicleTypes.VehicleType;
 
 @Entity
 public class Car extends Vehicle implements IDTOable<Car> {
-
-    /*
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    protected Long id;
-    */
-
     @Min(2)
-    private int seatCount;
+    private Integer seatCount;
 
     @Min(3)
-    private int doorCount;
+    private Integer doorCount;
 
     public Car() {
     }
@@ -44,16 +37,15 @@ public class Car extends Vehicle implements IDTOable<Car> {
     }
 
     static final class Queries {
-        public static final String FIND_BY_NAME = "SELECT entity FROM Car entity WHERE LOWER(entity.name) = LOWER(:name)";
         public static final String FIND_WITH_FIRST_LETTER = "SELECT entity FROM Car entity WHERE LOWER(entity.name) LIKE CONCAT(:letter, '%')";
         public static final String FIND_CONTAINING = "SELECT entity FROM Car entity WHERE LOWER(entity.name) LIKE CONCAT('%', LOWER(:keyword), '%')";
     }
 
-    public int getSeatCount() {
+    public Integer getSeatCount() {
         return seatCount;
     }
 
-    public int getDoorCount() {
+    public Integer getDoorCount() {
         return doorCount;
     }
 

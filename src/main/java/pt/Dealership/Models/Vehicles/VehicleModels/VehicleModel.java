@@ -1,27 +1,22 @@
 package pt.Dealership.Models.Vehicles.VehicleModels;
 
 import jakarta.persistence.*;
-import pt.Common.entities.EntityBase;
 import pt.Dealership.Models.Vehicles.VehicleBrands.VehicleBrand;
+import pt.Dealership.Models.Vehicles.VehicleStringContentEntity;
 
 @Entity
-public class VehicleModel extends EntityBase<VehicleModel> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String name;
+public class VehicleModel extends VehicleStringContentEntity<VehicleModel> {
 
     @ManyToOne
     private VehicleBrand brand;
 
     public VehicleModel() {
+        super();
     }
 
     public VehicleModel(VehicleBrand brand, String name) {
+        super(name);
         this.brand = brand;
-        this.name = name;
     }
 
     static final class Queries {
@@ -32,22 +27,8 @@ public class VehicleModel extends EntityBase<VehicleModel> {
         public static final String FIND_WITH_BRAND_NAME = "SELECT entity FROM VehicleModel entity WHERE LOWER(entity.brand.name) = LOWER(:brandName)";
     }
 
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public VehicleBrand getBrand() {
         return brand;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setBrand(VehicleBrand brand) {

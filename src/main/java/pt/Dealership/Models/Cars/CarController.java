@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pt.Common.controllers.ControllerBase;
 import pt.Common.entities.GenericDTO;
+import pt.Dealership.Models.Vehicles.VehicleController;
 
 @RestController
 @RequestMapping("/api/car")
-public class CarController extends ControllerBase<Car, Long, CarService> {
+public class CarController extends VehicleController<Car, CarService> {
 
     @Autowired
     private CarService service;

@@ -3,6 +3,7 @@ package pt.Dealership.Models.Vehicles.VehicleConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.Common.controllers.ServiceBase;
+import pt.Dealership.Models.Cars.Car;
 
 @Service
 public class VehicleConditionService extends ServiceBase<VehicleCondition, Long, VehicleConditionRepository> {
@@ -18,6 +19,11 @@ public class VehicleConditionService extends ServiceBase<VehicleCondition, Long,
     @Override
     protected void updateEntityProperties(VehicleCondition updatedBody, VehicleCondition entityToUpdate) {
 
+    }
+
+    @Override
+    protected VehicleCondition tryGetEntity(VehicleCondition body) {
+        return null;
     }
 
     public VehicleCondition getByName(String name) {

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LicensePlateRepository extends JpaRepository<LicensePlate, Long> {
-    @Query(LicensePlate.Queries.FIND_BY_NAME)
+    @Query
     Optional<LicensePlate> findByName(String name);
 
     @Query(LicensePlate.Queries.FIND_WITH_FIRST_LETTER)

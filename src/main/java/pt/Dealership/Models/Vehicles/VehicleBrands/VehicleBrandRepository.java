@@ -10,7 +10,7 @@ public interface VehicleBrandRepository extends JpaRepository<VehicleBrand, Long
     @Query(VehicleBrand.Queries.FIND_BY_NAME)
     Optional<VehicleBrand> findByName(String name);
 
-    @Query(VehicleBrand.Queries.FIND_BY_FIRST_LETTER)
+    @Query(VehicleBrand.Queries.FIND_WITH_FIRST_LETTER)
     List<VehicleBrand> findByFirstLetter(String letter);
 
     @Query(VehicleBrand.Queries.FIND_CONTAINING)

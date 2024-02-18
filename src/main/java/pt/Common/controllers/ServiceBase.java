@@ -1,6 +1,7 @@
 package pt.Common.controllers;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import pt.Common.interfaces.IKeyIdentifiable.IKeyIdentifiableRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,10 +9,10 @@ import java.util.Optional;
 /**
  * Base class for all Service Classes with common CRUD operations
  * @param <T> model type (ex: brand, car, etc)
- * @param <Key> primary key
+ * @param <K> primary key
  * @param <R> repository
  */
-public abstract class ServiceBase<T, Key, R extends JpaRepository<T, Key>> extends ServiceBaseParent<T, Key> {
+public abstract class ServiceBase<T, K, R extends JpaRepository<T, K>> extends ServiceBaseParent<T, K> {
 
     // auto wire a private repository in the child class, and override this method to get thae autowired repo
     protected abstract R getRepository();
@@ -22,14 +23,14 @@ public abstract class ServiceBase<T, Key, R extends JpaRepository<T, Key>> exten
     // ==============================================================================================================
 
     @Override
-    public T getById(Key id) {
+    public T findById(K id) {
         Optional<T> optionalEntity = getRepository().findById(id);
         return optionalEntity.orElse(null);
     }
 
 
     @Override
-    public List<T> getAll() {
+    public List<T> findAll() {
         return getRepository().findAll();
     }
 
@@ -40,12 +41,15 @@ public abstract class ServiceBase<T, Key, R extends JpaRepository<T, Key>> exten
             return getRepository().save(body);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return tryGetEntity(body);
         }
     }
 
+    // if it's not possible to create an entity, use this method to try and get one with current properties
+    protected abstract T tryGetEntity(T body);
+
     @Override
-    public T update(Key id, T body) {
+    public T update(K id, T body) {
         Optional<T> optionalEntity = getRepository().findById(id);
         if (optionalEntity.isPresent()) {
             T entity = optionalEntity.get();
@@ -63,7 +67,7 @@ public abstract class ServiceBase<T, Key, R extends JpaRepository<T, Key>> exten
 
 
     @Override
-    public T delete(Key id) {
+    public T delete(K id) {
         Optional<T> optionalEntity = getRepository().findById(id);
         if (optionalEntity.isPresent()) {
             T entity = optionalEntity.get();
@@ -75,21 +79,4 @@ public abstract class ServiceBase<T, Key, R extends JpaRepository<T, Key>> exten
     }
 
 
-
-    /*
-    // < OLD >
-    // still had to write too much!
-    // Most services are the same, so I had to make it even more abstract and generic as seen above
-    // Public API
-    // ==============================================================================================================
-    public abstract T getById(Key id);
-
-    public abstract List<T> getAll();
-
-    public abstract T create(T body);
-
-    public abstract T update(Key id, T body);
-
-    public abstract T delete(Key id);
-    */
 }
