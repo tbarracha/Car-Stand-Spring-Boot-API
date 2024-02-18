@@ -31,7 +31,11 @@ public class VehicleModelController extends ControllerBase<VehicleModel, Long, V
         System.out.println(this.getClass().getSimpleName() + ", wont populate yet");
     }
 
-    public void populateWithModels() {
+    @Override
+    public void tryLatePopulate() {
+        if (isLatePopulated)
+            return;
+
         // Audi
         getService().create((long) 1, "A1");
         getService().create((long) 1, "A2");
@@ -96,6 +100,8 @@ public class VehicleModelController extends ControllerBase<VehicleModel, Long, V
         getService().create((long) 13, "Impreza");
         getService().create((long) 13, "Outback");
         getService().create((long) 13, "Forester");
+
+        isLatePopulated = true;
     }
 
 

@@ -82,6 +82,15 @@ public abstract class ControllerBase<T, K, S extends ServiceBaseParent<T, K>> { 
 
     protected abstract void populate();
 
+    protected boolean isLatePopulated = false;
+
+    public void tryLatePopulate() {
+        if (isLatePopulated)
+            return;
+
+        isLatePopulated = true;
+    }
+
 
     // HTTP Response Entities
     // ------------------------------------------------------------------------------------------

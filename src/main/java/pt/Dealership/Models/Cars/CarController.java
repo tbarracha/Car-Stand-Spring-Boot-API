@@ -29,14 +29,10 @@ public class CarController extends VehicleController<Car, CarService> {
         System.out.println(this.getClass().getSimpleName() + ", wont populate yet");
     }
 
-
-
-    boolean createdCars = false;
-
-    @PostMapping(value = "/create", produces = "application/json")
-    public ResponseEntity<String> populateWithCars() {
-        if (createdCars)
-            return ResponseEntity.ok("Created");
+    @Override
+    public void tryLatePopulate() {
+        if (isLatePopulated)
+            return;
 
         Random random = new Random();
 
@@ -59,7 +55,6 @@ public class CarController extends VehicleController<Car, CarService> {
             ));
         }
 
-        createdCars = true;
-        return ResponseEntity.ok("Created cars!");
+        isLatePopulated = true;
     }
 }

@@ -48,12 +48,14 @@ public class GreetingsController {
 
         // populate cars after all others
         for (ControllerBase c: controllers) {
-            if (c instanceof VehicleModelController vc) {
-                vc.populateWithModels();
+            if (c instanceof VehicleModelController mController) {
+                mController.tryLatePopulate();
             }
+        }
 
-            if (c instanceof CarController carTroller) {
-                carTroller.populateWithCars();
+        for (ControllerBase c: controllers) {
+            if (c instanceof CarController cController) {
+                cController.tryLatePopulate();
             }
         }
         System.out.println("");
