@@ -1,23 +1,17 @@
 package pt.Dealership.Controllers;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pt.Dealership.Vehicles.VehicleBrands.VehicleBrandController;
-import pt.Dealership.Vehicles.VehicleBrands.VehicleBrandService;
-import pt.Dealership.Vehicles.Colors.ColorController;
-import pt.Dealership.Vehicles.Colors.ColorService;
-import pt.Dealership.Vehicles.LicensePlates.LicensePlateController;
-import pt.Dealership.Vehicles.LicensePlates.LicensePlateService;
-import pt.Dealership.Vehicles.VehicleConditions.VehicleConditionController;
-import pt.Dealership.Vehicles.VehicleConditions.VehicleConditionService;
-import pt.Dealership.Vehicles.VehicleModels.VehicleModelController;
-import pt.Dealership.Vehicles.VehicleModels.VehicleModelService;
-import pt.Dealership.Vehicles.VehicleStatus.VehicleStatusController;
-import pt.Dealership.Vehicles.VehicleStatus.VehicleStatusService;
-import pt.Dealership.Vehicles.VehicleTypes.VehicleTypeController;
-import pt.Dealership.Vehicles.VehicleTypes.VehicleTypeService;
+import pt.Dealership.Models.Vehicles.VehicleBrands.VehicleBrandController;
+import pt.Dealership.Models.Vehicles.Colors.ColorController;
+import pt.Dealership.Models.Vehicles.LicensePlates.LicensePlateController;
+import pt.Dealership.Models.Vehicles.VehicleConditions.VehicleConditionController;
+import pt.Dealership.Models.Vehicles.VehicleModels.VehicleModelController;
+import pt.Dealership.Models.Vehicles.VehicleStatus.VehicleStatusController;
+import pt.Dealership.Models.Vehicles.VehicleTypes.VehicleTypeController;
 
 @RestController
 @RequestMapping("/api/greeting")
@@ -43,6 +37,13 @@ public class GreetingsController {
 
     @Autowired
     private VehicleTypeController vehicleTypeController;
+
+
+    @PostConstruct
+    public void initialize() {
+        populate();
+    }
+
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<String> greeting() {
