@@ -14,7 +14,7 @@ import pt.Dealership.Models.Vehicles.VehicleStatus.VehicleStatus;
 import pt.Dealership.Models.Vehicles.VehicleTypes.VehicleType;
 
 @Entity
-public class Car extends Vehicle implements IDTOable<Car> {
+public class Car extends Vehicle<Car> {
     @Min(2)
     private Integer seatCount;
 
@@ -24,14 +24,14 @@ public class Car extends Vehicle implements IDTOable<Car> {
     public Car() {
     }
 
-    public Car(VehicleType type, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int year, Color color, VehicleStatus status, VehicleCondition condition, double price, int seatCount, int doorCount) {
-        super(type, brand, model, licensePlate, year, color, status, condition, price);
+    public Car(VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int year, double price, int seatCount, int doorCount) {
+        super(type, status, condition, color, brand, model, licensePlate, year, price);
         this.seatCount = seatCount;
         this.doorCount = doorCount;
     }
 
-    public Car(String vin, VehicleType type, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearAssembled, Color color, VehicleStatus status, VehicleCondition condition, double price, int seatCount, int doorCount) {
-        super(vin, type, brand, model, licensePlate, yearAssembled, color, status, condition, price);
+    public Car(String vin, VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearAssembled, double price, int seatCount, int doorCount) {
+        super(vin, type, status, condition, color, brand, model, licensePlate, yearAssembled, price);
         this.seatCount = seatCount;
         this.doorCount = doorCount;
     }

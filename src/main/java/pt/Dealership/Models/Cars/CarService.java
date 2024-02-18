@@ -61,11 +61,11 @@ public class CarService extends VehicleService<Car> {
         }
     }
 
-    public Car create(String vin, VehicleType type, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearOfAssembly, Color color, VehicleStatus status, VehicleCondition condition, double price, int seatCount, int doorCount)
+    public Car create(String vin, VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearAssembled, double price, int seatCount, int doorCount)
     {
-        Car car = new Car(vin, type, brand, model, licensePlate, yearOfAssembly, color, status, condition, price, seatCount, doorCount);
-        return create(car);
+        return create(new Car(vin, type, status, condition, color, brand, model, licensePlate, yearAssembled, price, seatCount, doorCount));
     }
+
 
     /*
     public Car create(String vin, long typeId, long brandId, long modelId, String licensePlate, int yearOfAssembly, Color color, long statusId, long conditionId, double price, int seatCount, int doorCount)

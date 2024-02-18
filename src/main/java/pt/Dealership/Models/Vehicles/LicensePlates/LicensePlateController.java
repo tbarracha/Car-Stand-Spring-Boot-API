@@ -8,7 +8,7 @@ import pt.Common.controllers.ControllerBase;
 
 @Order(1)
 @RestController
-@RequestMapping("api/vehicle/license")
+@RequestMapping("api/vehicle/licenseplate")
 public class LicensePlateController extends ControllerBase<LicensePlate, Long, LicensePlateService> {
 
     @Autowired

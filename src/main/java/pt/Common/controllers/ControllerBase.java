@@ -20,6 +20,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  * @param <K> primary key
  * @param <S> service
  */
+@CrossOrigin(origins = "http://localhost:4200")
 public abstract class ControllerBase<T, K, S extends ServiceBaseParent<T, K>> { //implements ICrud<T, Key> {
 
     protected abstract S getService();

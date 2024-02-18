@@ -13,7 +13,7 @@ import java.util.Random;
 
 @Order(99)
 @RestController
-@RequestMapping("/api/car")
+@RequestMapping("/api/vehicle/car")
 public class CarController extends VehicleController<Car, CarService> {
 
     @Autowired
@@ -42,13 +42,13 @@ public class CarController extends VehicleController<Car, CarService> {
             getService().create(new Car(
                     VinGenerator.generateVin(),
                     typeService.findById(i + 1L), // Varying types
+                    statusService.findById((i + 1) % 2 + 1L), // Varying status
+                    conditionService.findById((i + 2) % 3 + 1L), // Varying conditions
+                    colorService.findById((i + 2) % 3 + 1L), // Varying colors
                     model.getBrand(), // Varying brands
                     model, // Varying models
                     licensePlateService.create(new LicensePlate("XYZ00" + (i + 1))),
                     2023 - i, // Decreasing year of assembly
-                    colorService.findById((i + 2) % 3 + 1L), // Varying colors
-                    statusService.findById((i + 1) % 2 + 1L), // Varying status
-                    conditionService.findById((i + 2) % 3 + 1L), // Varying conditions
                     20000.00 + (i * 1000), // Increasing price
                     5,
                     4
@@ -57,4 +57,5 @@ public class CarController extends VehicleController<Car, CarService> {
 
         isLatePopulated = true;
     }
+
 }
