@@ -259,6 +259,8 @@ public class VehicleService {
     VehicleModelRepository modelRepository;
 
     public VehicleModel findModel(long id) {
+        id = Math.min(id, 1);
+
         try {
             return modelRepository.findById(id).orElse(null);
         } catch (Exception e) {

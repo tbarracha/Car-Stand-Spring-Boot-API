@@ -24,20 +24,20 @@ public class VehicleController {
     // ----------------------------------------------------------------------------------------------
     @GetMapping("/conditions")
     public ResponseEntity<CollectionModel<EntityModel<VehicleCondition>>> getAllConditions() {
-        List<VehicleCondition> conditions = vehicleService.findAllConditions();
-        return ControllerBase.getCollectionModelResponse(conditions);
+        List<VehicleCondition> entityList = vehicleService.findAllConditions();
+        return ControllerBase.getCollectionModelResponse(entityList);
     }
 
     @GetMapping("/statuses")
     public ResponseEntity<CollectionModel<EntityModel<VehicleStatus>>> getAllStatuses() {
-        List<VehicleStatus> statuses = vehicleService.findAllStatus();
-        return ControllerBase.getCollectionModelResponse(statuses);
+        List<VehicleStatus> entityList = vehicleService.findAllStatus();
+        return ControllerBase.getCollectionModelResponse(entityList);
     }
 
     @GetMapping("/types")
     public ResponseEntity<CollectionModel<EntityModel<VehicleType>>> getAllTypes() {
-        List<VehicleType> types = vehicleService.findAllVehicleTypes();
-        return ControllerBase.getCollectionModelResponse(types);
+        List<VehicleType> entityList = vehicleService.findAllVehicleTypes();
+        return ControllerBase.getCollectionModelResponse(entityList);
     }
 
 
@@ -46,8 +46,8 @@ public class VehicleController {
     // ----------------------------------------------------------------------------------------------
     @GetMapping("/brands")
     public ResponseEntity<CollectionModel<EntityModel<VehicleBrand>>> getAllBrands() {
-        List<VehicleBrand> brands = vehicleService.findAllBrands();
-        return ControllerBase.getCollectionModelResponse(brands);
+        List<VehicleBrand> entityList = vehicleService.findAllBrands();
+        return ControllerBase.getCollectionModelResponse(entityList);
     }
 
     @GetMapping("/brands/{nameOrId}")
@@ -56,13 +56,13 @@ public class VehicleController {
             return ControllerBase.getEntityModelResponse(null);
 
         // name
-        VehicleBrand brand = vehicleService.findBrand(nameOrId);
+        VehicleBrand entityList = vehicleService.findBrand(nameOrId);
 
         // long
-        if (brand == null)
-            brand = vehicleService.findBrand(Long.parseLong(nameOrId));
+        if (entityList == null)
+            entityList = vehicleService.findBrand(Long.parseLong(nameOrId));
 
-        return ControllerBase.getEntityModelResponse(brand);
+        return ControllerBase.getEntityModelResponse(entityList);
     }
 
     @GetMapping("/brands/id/{id}")
@@ -99,20 +99,34 @@ public class VehicleController {
         return ControllerBase.getEntityModelResponse(model);
     }
 
+
     @GetMapping("/models/brand/{brandNameOrId}")
     public ResponseEntity<CollectionModel<EntityModel<VehicleModel>>> getModelByBrandNameOrId(@PathVariable String brandNameOrId) {
         if (brandNameOrId.isEmpty())
             return ControllerBase.getCollectionModelResponse(null);
 
-        // name
-        List<VehicleModel> entity = vehicleService.findModelsByBrandName(brandNameOrId);
+        List<VehicleModel> entityList = vehicleService.findModelsByBrandName(brandNameOrId);
+        if (entityList == null || entityList.isEmpty())
+            entityList = vehicleService.findModelsByBrandId(Integer.parseInt(brandNameOrId));
 
-        // long
-        if (entity.isEmpty())
-            entity = vehicleService.findModelsByBrandId(Long.parseLong(brandNameOrId));
-
-        return ControllerBase.getCollectionModelResponse(entity);
+        return ControllerBase.getCollectionModelResponse(entityList);
     }
+
+    @GetMapping("/models/brand/name/{name}")
+    public ResponseEntity<CollectionModel<EntityModel<VehicleModel>>> getModelByBrandName(@PathVariable String name) {
+        if (name.isEmpty())
+            return ControllerBase.getCollectionModelResponse(null);
+
+        List<VehicleModel> entityList = vehicleService.findModelsByBrandName(name);
+        return ControllerBase.getCollectionModelResponse(entityList);
+    }
+
+    @GetMapping("/models/brand/id/{id}")
+    public ResponseEntity<CollectionModel<EntityModel<VehicleModel>>> getModelByBrandId(@PathVariable long id) {
+        List<VehicleModel> entityList = vehicleService.findModelsByBrandId(id);
+        return ControllerBase.getCollectionModelResponse(entityList);
+    }
+
     @PostMapping("/models")
     public ResponseEntity<EntityModel<VehicleModel>> createModel(@RequestParam String brandName, @RequestParam String modelName) {
         VehicleModel model = vehicleService.createModel(brandName, modelName);
