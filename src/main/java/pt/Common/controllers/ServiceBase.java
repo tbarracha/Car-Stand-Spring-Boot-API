@@ -40,12 +40,12 @@ public abstract class ServiceBase<T, K, R extends JpaRepository<T, K>> extends S
             return getRepository().save(body);
         } catch (Exception e) {
             e.printStackTrace();
-            return tryGetEntity(body);
+            return tryFindEntity(body);
         }
     }
 
     // if it's not possible to create an entity, use this method to try and get one with current properties
-    protected abstract T tryGetEntity(T body);
+    protected abstract T tryFindEntity(T body);
 
     @Override
     public T update(K id, T body) {
@@ -77,5 +77,15 @@ public abstract class ServiceBase<T, K, R extends JpaRepository<T, K>> extends S
         return null;
     }
 
-
+    public static <T, K> T saveEntity(T entityBody, JpaRepository<T, K> repository) {
+        try {
+            if (entityBody != null)
+                return repository.save(entityBody);
+            else
+                return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

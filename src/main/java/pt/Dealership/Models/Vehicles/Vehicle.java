@@ -3,14 +3,8 @@ package pt.Dealership.Models.Vehicles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import pt.Common.interfaces.IDTOable;
-import pt.Dealership.Models.Cars.Car;
-import pt.Dealership.Models.Vehicles.Colors.Color;
-import pt.Dealership.Models.Vehicles.LicensePlates.LicensePlate;
-import pt.Dealership.Models.Vehicles.VehicleBrands.VehicleBrand;
-import pt.Dealership.Models.Vehicles.VehicleConditions.VehicleCondition;
-import pt.Dealership.Models.Vehicles.VehicleModels.VehicleModel;
-import pt.Dealership.Models.Vehicles.VehicleStatus.VehicleStatus;
-import pt.Dealership.Models.Vehicles.VehicleTypes.VehicleType;
+import pt.Dealership.Models.Color;
+import pt.Dealership.Models.VehicleComponents.*;
 
 @MappedSuperclass
 public abstract class Vehicle<T> implements IDTOable<T> {
@@ -39,6 +33,10 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     @ManyToOne
     protected LicensePlate licensePlate;
 
+    // add endpoints
+    String buyerID;
+    String transactionID;
+
     @Min(1990)
     @Max(2030)
     protected Integer yearOfAssembly; // can't be "year" because it is a reserved variable name
@@ -50,7 +48,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
 
     }
 
-    public Vehicle(VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int year, double price) {
+    public Vehicle(VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearOfAssembly, double price) {
         this.type = type;
         this.status = status;
         this.condition = condition;
@@ -58,7 +56,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.brand = brand;
         this.model = model;
         this.licensePlate = licensePlate;
-        this.yearOfAssembly = year;
+        this.yearOfAssembly = yearOfAssembly;
         this.price = price;
     }
 
