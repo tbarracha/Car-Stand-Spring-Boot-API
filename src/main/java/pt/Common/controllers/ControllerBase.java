@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import pt.Common.entities.GenericDTO;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,9 +43,7 @@ public abstract class ControllerBase {
 
     public static <T> ResponseEntity<CollectionModel<EntityModel<T>>> getCollectionModelResponse(List<T> items) {
         if (!items.isEmpty()) {
-            List<EntityModel<T>> entityModels = items.stream()
-                    .map(EntityModel::of)
-                    .collect(Collectors.toList());
+            List<EntityModel<T>> entityModels = items.stream().map(EntityModel::of).collect(Collectors.toList());
             return ResponseEntity.ok(CollectionModel.of(entityModels));
         } else {
             return ResponseEntity.notFound().build();
@@ -55,7 +54,7 @@ public abstract class ControllerBase {
 
     // Generate Links
     // ------------------------------------------------------------------------------------------
-    protected static <T> List<Link> generateAllLinks(T model, Class<?> controllerClass) {
+    public static <T> List<Link> generateAllLinks(T model, Class<?> controllerClass) {
         List<Link> links = new ArrayList<>();
 
         try {
@@ -64,31 +63,60 @@ public abstract class ControllerBase {
             links.add(generateCreateLink(model, controllerClass));
             links.add(generateUpdateLink(model, controllerClass));
             links.add(generateDeleteLink(model, controllerClass));
-
-            return links;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return links;
+        }
+
+        return links;
+    }
+
+    public static <T> Link generateGetByIdLink(T model, Class<?> controllerClass) {
+        try {
+            Method getByIdMethod = controllerClass.getMethod("findById", model.getClass().getMethod("getId").getReturnType());
+            return WebMvcLinkBuilder.linkTo(getByIdMethod).withRel("findById");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
-    protected static <T> Link generateGetByIdLink(T model, Class<?> controllerClass) throws Exception {
-        return WebMvcLinkBuilder.linkTo(controllerClass.getMethod("getById", model.getClass().getMethod("getId").getReturnType())).withRel("getById");
+    public static Link generateGetAllLink(Class<?> controllerClass) {
+        try {
+            Method getAllMethod = controllerClass.getMethod("getAll");
+            return WebMvcLinkBuilder.linkTo(getAllMethod).withRel("getAll");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    protected static Link generateGetAllLink(Class<?> controllerClass) throws Exception {
-        return WebMvcLinkBuilder.linkTo(controllerClass.getMethod("getAll")).withRel("getAll");
+    public static <T> Link generateCreateLink(T model, Class<?> controllerClass) {
+        try {
+            Method createMethod = controllerClass.getMethod("create", model.getClass());
+            return WebMvcLinkBuilder.linkTo(createMethod).withRel("create");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    protected static <T> Link generateCreateLink(T model, Class<?> controllerClass) throws Exception {
-        return WebMvcLinkBuilder.linkTo(controllerClass.getMethod("create", model.getClass())).withRel("create");
+    public static <T> Link generateUpdateLink(T model, Class<?> controllerClass) {
+        try {
+            Method updateMethod = controllerClass.getMethod("update", model.getClass().getMethod("getId").getReturnType(), model.getClass());
+            return WebMvcLinkBuilder.linkTo(updateMethod).withRel("update");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    protected static <T> Link generateUpdateLink(T model, Class<?> controllerClass) throws Exception {
-        return WebMvcLinkBuilder.linkTo(controllerClass.getMethod("update", model.getClass().getMethod("getId").getReturnType(), model.getClass())).withRel("update");
-    }
-
-    protected static <T> Link generateDeleteLink(T model, Class<?> controllerClass) throws Exception {
-        return WebMvcLinkBuilder.linkTo(controllerClass.getMethod("delete", model.getClass().getMethod("getId").getReturnType())).withRel("delete");
+    public static <T> Link generateDeleteLink(T model, Class<?> controllerClass) {
+        try {
+            Method deleteMethod = controllerClass.getMethod("delete", model.getClass().getMethod("getId").getReturnType());
+            return WebMvcLinkBuilder.linkTo(deleteMethod).withRel("delete");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

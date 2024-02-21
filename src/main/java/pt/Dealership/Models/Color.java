@@ -1,12 +1,14 @@
 package pt.Dealership.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import pt.Common.entities.EntityBase;
 
 @Entity
 public class Color extends EntityBase<Color> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Min(1)
     private Long id;
 
     @Column(unique = true, nullable = false)

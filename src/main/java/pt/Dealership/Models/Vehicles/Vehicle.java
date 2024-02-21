@@ -3,6 +3,7 @@ package pt.Dealership.Models.Vehicles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import pt.Common.interfaces.IDTOable;
+import pt.Dealership.Enums.DefaultVehicleStatus;
 import pt.Dealership.Models.Color;
 import pt.Dealership.Models.VehicleComponents.*;
 
@@ -10,7 +11,7 @@ import pt.Dealership.Models.VehicleComponents.*;
 public abstract class Vehicle<T> implements IDTOable<T> {
     @Id
     @Column(unique = true, nullable = false)
-    protected String vin; // = VinGenerator.generateVin();
+    protected String vin;
 
     @ManyToOne
     protected VehicleType type;
@@ -33,16 +34,18 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     @ManyToOne
     protected LicensePlate licensePlate;
 
-    // add endpoints
-    String buyerID;
-    String transactionID;
-
     @Min(1990)
     @Max(2030)
     protected Integer yearOfAssembly; // can't be "year" because it is a reserved variable name
 
     @DecimalMin(value = "0.99")
     protected Double price;
+
+    //@Transient
+    String buyerId;
+
+    //@Transient
+    String transactionId;
 
     public Vehicle() {
 
@@ -83,6 +86,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.vin = vin;
     }
 
+
     // Type
     public VehicleType getType() {
         return type;
@@ -91,6 +95,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     public void setType(VehicleType type) {
         this.type = type;
     }
+
 
     // Status
     public VehicleStatus getStatus() {
@@ -101,6 +106,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.status = status;
     }
 
+
     // Condition
     public VehicleCondition getCondition() {
         return condition;
@@ -109,6 +115,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     public void setCondition(VehicleCondition condition) {
         this.condition = condition;
     }
+
 
     // Color
     public Color getColor() {
@@ -119,6 +126,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.color = color;
     }
 
+
     // Brand
     public VehicleBrand getBrand() {
         return brand;
@@ -127,6 +135,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     public void setBrand(VehicleBrand brand) {
         this.brand = brand;
     }
+
 
     // Model
     public VehicleModel getModel() {
@@ -137,6 +146,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.model = model;
     }
 
+
     // License Plate
     public LicensePlate getLicensePlate() {
         return licensePlate;
@@ -145,6 +155,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     public void setLicensePlate(LicensePlate licensePlate) {
         this.licensePlate = licensePlate;
     }
+
 
     // Year of Assembly
     public Integer getYearOfAssembly() {
@@ -155,6 +166,7 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.yearOfAssembly = yearOfAssembly;
     }
 
+
     // Price
     public Double getPrice() {
         return price;
@@ -162,5 +174,36 @@ public abstract class Vehicle<T> implements IDTOable<T> {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+
+    // Buyer
+    public String getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(String buyerId) {
+        this.buyerId = buyerId;
+    }
+
+
+    // transaction
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+
+
+    // Delete
+    public void delete() {
+        this.status = null;
+    }
+
+    public void restore() {
+        this.status = new VehicleStatus(DefaultVehicleStatus.UNAVAILABLE.toString());
     }
 }

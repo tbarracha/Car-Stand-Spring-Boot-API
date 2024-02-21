@@ -1,7 +1,11 @@
 package pt.Dealership.Services;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pt.Common.controllers.ServiceBase;
 import pt.Dealership.Enums.*;
@@ -25,6 +29,10 @@ public class VehicleService {
     @Autowired
     ColorService colorService;
 
+    private void print(String message, Object... params) {
+        System.out.println(String.format(message, params));
+    }
+
     // Initialization
     @PostConstruct
     public void initialize() {
@@ -32,22 +40,22 @@ public class VehicleService {
 
         // Status
         for (var value : DefaultVehicleStatus.values()) {
-            createStatus(value.toString());
+            createStatus(value.toString().toLowerCase());
         }
 
         // Condition
         for (var value : DefaultVehicleCondition.values()) {
-            createCondition(value.toString());
+            createCondition(value.toString().toLowerCase());
         }
 
         // Vehicle Type
         for (var value : DefaultVehicleType.values()) {
-            createVehicleType(value.toString());
+            createVehicleType(value.toString().toLowerCase());
         }
 
         // Default Brands
         for (var value : DefaultVehicleBrands.values()) {
-            createBrand(value.toString());
+            createBrand(value.toString().toLowerCase());
         }
 
         // only create cars once we have a colorService
@@ -65,7 +73,7 @@ public class VehicleService {
     }
 
     private void createExampleCars() {
-        System.out.println("\n=== CREATING example cars! ===\n");
+        print("\n=== CREATING example cars! ===\n");
 
         createCar("VIN123", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Black", "Toyota", "Camry", "ABC123", 2023, 30000, 5, 4);
 
@@ -89,7 +97,7 @@ public class VehicleService {
 
         createCar("VIN808", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Red", "Subaru", "Outback", "BCD890", 2023, 38000, 5, 4);
 
-        System.out.println("\n=== CREATED example cars! ===\n");
+        print("\n=== CREATED example cars! ===\n");
     }
 
 
@@ -305,10 +313,12 @@ public class VehicleService {
         }
     }
 
+    @Transactional
     public VehicleModel saveModel(VehicleModel body) {
         return ServiceBase.saveEntity(body, modelRepository);
     }
 
+    @Transactional
     public VehicleModel createModel(VehicleBrand brand, String name) {
         try {
             if (brand == null)
@@ -326,6 +336,7 @@ public class VehicleService {
         }
     }
 
+    @Transactional
     public VehicleModel createModel(String brandName, String modelName) {
         try {
             var brand = createBrand(brandName);
@@ -370,12 +381,12 @@ public class VehicleService {
         }
     }
 
+    @Transactional
     public LicensePlate saveLicensePlate(LicensePlate body) {
         return ServiceBase.saveEntity(body, licensePlateRepository);
     }
 
-
-
+    @Transactional
     public LicensePlate createLicensePlate(String name) {
         try {
             var license = findLicensePlate(name);
@@ -385,6 +396,18 @@ public class VehicleService {
             }
 
             return license;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public LicensePlate deleteLicensePlate(Long id) {
+        try {
+            LicensePlate licensePlate = findLicensePlate(id);
+            licensePlateRepository.deleteById(id);
+            return licensePlate;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -425,10 +448,12 @@ public class VehicleService {
         }
     }
 
+    @Transactional
     public VehicleType saveType(VehicleType body) {
         return ServiceBase.saveEntity(body, vehicleTypeRepository);
     }
 
+    @Transactional
     public VehicleType createVehicleType(String name) {
         try {
             var vehicleType = findVehicleType(name);
@@ -449,6 +474,134 @@ public class VehicleService {
     // ----------------------------------------------------------
     @Autowired
     CarRepository carRepository;
+
+    @Transactional
+    public Car saveCar(Car body) {
+        return ServiceBase.saveEntity(body, carRepository);
+    }
+
+    @Transactional
+    public Car updateCar(Car body) {
+        if (body == null)
+            return null;
+
+        Car car = findCar(body.getVin());
+
+        car.setType(body.getType());
+        car.setStatus(body.getStatus());
+        car.setCondition(body.getCondition());
+        car.setColor(body.getColor());
+        car.setBrand(body.getBrand());
+        car.setModel(body.getModel());
+        car.setLicensePlate(body.getLicensePlate());
+        car.setYearOfAssembly(body.getYearOfAssembly());
+        car.setPrice(body.getPrice());
+        car.setSeatCount(body.getSeatCount());
+        car.setDoorCount(body.getDoorCount());
+
+        car = saveCar(car);
+
+        return car;
+    }
+
+    @Transactional
+    public Car createCar(Car body) {
+        try {
+            Car car = findCar(body.getVin());
+
+            if (car == null) {
+                car = saveCar(body);
+            }
+
+            else {
+                car = updateCar(car);
+            }
+
+            return car;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public Car createCar(String vin, VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearOfAssembly, double price, int seatCount, int doorCount) {
+        try {
+            Car car = findCar(vin);
+
+            // create
+            if (car == null) {
+                car = new Car(vin, type, status, condition, color, brand, model, licensePlate, yearOfAssembly, price, seatCount, doorCount);
+                car = saveCar(car);
+            }
+
+            // update
+            else {
+                car = updateCar(car);
+            }
+
+            return car;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public Car createCar(String vin, String type, String status, String condition, String color, String brand, String model, String licensePlate, int yearOfAssembly, double price, int seatCount, int doorCount) {
+        try {
+            Car car = findCar(vin);
+
+            // create
+            if (car == null) {
+                var vBrand = createBrand(brand.toLowerCase());
+                var vModel = createModel(vBrand, model.toLowerCase());
+
+                car = new Car(
+                        vin,
+                        createVehicleType(type.toLowerCase()),
+                        createStatus(status.toLowerCase()),
+                        createCondition(condition.toLowerCase()),
+                        colorService.findByName(color.toLowerCase()),
+                        vBrand,
+                        vModel,
+                        createLicensePlate(licensePlate.toLowerCase()),
+                        yearOfAssembly,
+                        price,
+                        seatCount,
+                        doorCount
+                );
+
+                car = saveCar(car);
+            }
+
+            return car;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public Car deleteCar(String vin) {
+        try {
+            Car car = findCar(vin);
+
+            if (car == null)
+                return null;
+
+            car.delete();
+            return saveCar(car);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    // Find Cars
+    // ----------------------------------------------------------------------------------
 
     public Car findCar(String vin) {
         try {
@@ -477,100 +630,101 @@ public class VehicleService {
         }
     }
 
-    public Car saveCar(Car body) {
-        return ServiceBase.saveEntity(body, carRepository);
+    public Page<Car> findCarsPage(int pageNumber, int size) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, size);
+        return carRepository.findAll(pageRequest);
     }
 
-    public Car createCar(String vin, VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearOfAssembly, double price, int seatCount, int doorCount) {
+    public Page<Car> findCarsPage(int pageNumber, int size, String sort) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, size, Sort.by(sort));
+        return carRepository.findAll(pageRequest);
+    }
+
+    // Find cars by brand
+    public Page<Car> findCarsByBrand(String brandName, int pageNumber, int pageSize) {
+        VehicleBrand brand = findBrand(brandName);
+        if (brand == null) {
+            return null;
+        }
+        return carRepository.findByBrand(brand, PageRequest.of(pageNumber, pageSize, Sort.by("brand.Name")));
+    }
+
+    // Find cars by model
+    public Page<Car> findCarsByModel(String modelName, int pageNumber, int pageSize) {
+        VehicleModel model = findModel(modelName);
+        if (model == null) {
+            return null;
+        }
+        return carRepository.findByModel(model, PageRequest.of(pageNumber, pageSize, Sort.by("model.Name")));
+    }
+
+    // Find cars by color
+    public Page<Car> findCarsByColor(String colorName, int pageNumber, int pageSize) {
+        Color color = colorService.findByName(colorName);
+        if (color == null) {
+            return null;
+        }
+        return carRepository.findByColor(color, PageRequest.of(pageNumber, pageSize));
+    }
+
+    // Find cars by status
+    public Page<Car> findCarsByStatus(String statusName, int pageNumber, int pageSize) {
+        VehicleStatus status = findStatus(statusName);
+        if (status == null) {
+            return null;
+        }
+
+        return carRepository.findByStatus(status, PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Transactional
+    public Car updateVehicleStatus(String vin, String newStatus) {
         try {
             Car car = findCar(vin);
 
-            // create
-            if (car == null) {
-                car = new Car(vin, type, status, condition, color, brand, model, licensePlate, yearOfAssembly, price, seatCount, doorCount);
-                car = saveCar(car);
+            if (car == null)
+            {
+                System.out.println(String.format("Car VIN: '%s' does not exist!", vin));
+                return null;
             }
 
-            // update
-            else {
-                car.setType(type);
-                car.setStatus(status);
-                car.setCondition(condition);
-                car.setColor(color);
-                car.setBrand(brand);
-                car.setModel(model);
-                car.setLicensePlate(licensePlate);
-                car.setYearOfAssembly(yearOfAssembly);
-                car.setPrice(price);
-                car.setSeatCount(seatCount);
-                car.setDoorCount(doorCount);
+            VehicleStatus status = findStatus(newStatus);
 
-                car = saveCar(car);
+            if (status == null)
+            {
+                System.out.println(String.format("Status: '%s' does not exist!", newStatus));
+                return null;
             }
 
-            return car;
+            car.setStatus(status);
+            return saveCar(car);
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public Car createCar(String vin, String type, String status, String condition, String color, String brand, String model, String licensePlate, int yearOfAssembly, double price, int seatCount, int doorCount) {
-        try {
-            Car car = findCar(vin);
+    @Transactional
+    public Car buyCar(String vin, String buyerId, String transactionId) {
+        Car car = findCar(vin);
 
-            // create
-            if (car == null) {
-                var vBrand = createBrand(brand);
-                var vModel = createModel(vBrand, model);
-
-                car = new Car(
-                        vin,
-                        createVehicleType(type),
-                        createStatus(status),
-                        createCondition(condition),
-                        colorService.findByName(color),
-                        vBrand,
-                        vModel,
-                        createLicensePlate(licensePlate),
-                        yearOfAssembly,
-                        price,
-                        seatCount,
-                        doorCount
-                );
-
-                car = saveCar(car);
-            }
-
-            return car;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (car == null) {
+            print("Car VIN: '%s' doesn't exist", vin);
             return null;
         }
-    }
 
-    public Car deleteCar(Car car) {
-        try {
-            if (car != null) {
-                carRepository.delete(car);
-            }
-            return car;
-        } catch (Exception e) {
-            e.printStackTrace();
+        VehicleStatus status = findStatus(DefaultVehicleStatus.SOLD.toString());
+
+        if (status == null) {
+            print("Status '%s' doesn't exist!", DefaultVehicleStatus.SOLD.toString());
             return null;
         }
-    }
 
-    public Car deleteCar(String vin) {
-        try {
-            Car carToDelete = findCar(vin);
-            if (carToDelete != null) {
-                carRepository.delete(carToDelete);
-            }
-            return carToDelete;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        car.setStatus(status);
+        car.setBuyerId(buyerId);
+        car.setTransactionId(transactionId);
+
+        return saveCar(car);
     }
 }

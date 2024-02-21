@@ -1,9 +1,13 @@
 package pt.Dealership.Repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
-import pt.Dealership.Models.VehicleComponents.LicensePlate;
+import pt.Dealership.Models.Color;
+import pt.Dealership.Models.VehicleComponents.*;
+import pt.Dealership.Models.Vehicles.Car;
 import pt.Dealership.Models.Vehicles.Vehicle;
 
 import java.util.List;
@@ -11,50 +15,30 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface VehicleRepository<T extends Vehicle> extends JpaRepository<T, String> {
-    @Query //("SELECT entity FROM VehicleType entity WHERE LOWER(entity.vin) = LOWER(:vin)")
+    @Query
     Optional<T> findByVin(String vin);
 
     @Query
-    List<Vehicle> findByLicensePlate(LicensePlate licensePlate);
+    Page<T> findByBrand(VehicleBrand brand, Pageable pageable);
 
-    /*
-    @Query("SELECT v FROM Vehicle v WHERE v.licensePlate.name = :licensePlate")
-    List<Vehicle> findByLicensePlate(String licensePlate);
+    @Query
+    Page<T> findByModel(VehicleModel model, Pageable pageable);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.brand.id = :brandId")
-    List<Vehicle> findByBrandId(Long brandId);
+    @Query
+    Page<T> findByStatus(VehicleStatus status, Pageable pageable);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.brand.name = :brandName")
-    List<Vehicle> findByBrandName(String brandName);
+    @Query
+    Page<T> findByCondition(VehicleCondition condition, Pageable pageable);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.model.id = :modelId")
-    List<Vehicle> findByModelId(Long modelId);
-    @Query("SELECT v FROM Vehicle v WHERE v.model.name = :modelName")
-    List<Vehicle> findByModelName(String modelName);
+    @Query
+    Page<T> findByLicensePlate(LicensePlate licensePlate, Pageable pageable);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.color.id = :colorId")
-    List<Vehicle> findByColorId(Long colorId);
+    @Query
+    Page<T> findByColor(Color color, Pageable pageable);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.color.hexadecimal = :colorHexadecimal")
-    List<Vehicle> findByColorHexadecimal(String colorHexadecimal);
+    @Query
+    Page<T> findByTransactionId(String transactionId, Pageable pageable);
 
-    @Query("SELECT v FROM Vehicle v WHERE v.yearOfAssembly = :yearOfAssembly")
-    List<Vehicle> findByYearOfAssembly(Integer yearOfAssembly);
-
-    @Query("SELECT v FROM Vehicle v WHERE v.status = :status")
-    List<Vehicle> findByStatus(VehicleStatus status);
-
-    @Query("SELECT v FROM Vehicle v WHERE v.condition = :condition")
-    List<Vehicle> findByCondition(VehicleCondition condition);
-
-    @Query("SELECT v FROM Vehicle v WHERE v.price = :price")
-    List<Vehicle> findByPrice(Double price);
-
-    @Query("SELECT v FROM Vehicle v WHERE v.price <= :maxPrice")
-    List<Vehicle> findByPriceLessThanEqual(Double maxPrice);
-
-    @Query("SELECT v FROM Vehicle v WHERE v.price >= :minPrice AND v.price <= :maxPrice")
-    List<Vehicle> findByPriceBetween(Double minPrice, Double maxPrice);
-
-     */
+    @Query
+    Page<T> findByBuyerId(String buyerId, Pageable pageable);
 }

@@ -1,6 +1,12 @@
 package pt.Dealership.Enums;
 
 public enum DefaultVehicleStatus {
+    UNAVAILABLE {
+        @Override
+        public String toString() {
+            return "Unavailable";
+        }
+    },
     AVAILABLE {
         @Override
         public String toString() {
