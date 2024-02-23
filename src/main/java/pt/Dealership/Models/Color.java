@@ -2,10 +2,10 @@ package pt.Dealership.Models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import pt.Common.entities.EntityBase;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
-public class Color extends EntityBase<Color> {
+public class Color extends RepresentationModel<Color> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Min(1)

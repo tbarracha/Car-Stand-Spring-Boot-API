@@ -12,6 +12,7 @@ import pt.Common.controllers.ControllerBase;
 import pt.Common.entities.GenericDTO;
 import pt.Dealership.Models.VehicleComponents.*;
 import pt.Dealership.Models.Vehicles.Car;
+import pt.Dealership.Models.Vehicles.CarDTO;
 import pt.Dealership.Services.VehicleService;
 
 import java.util.ArrayList;
@@ -31,21 +32,27 @@ public class VehicleController {
     // Getters for Vehicle Components
     // ----------------------------------------------------------------------------------------------
     @GetMapping("/conditions")
-    public ResponseEntity<CollectionModel<EntityModel<VehicleCondition>>> getAllConditions() {
+    public CollectionModel<VehicleCondition> getAllConditions() {
         List<VehicleCondition> entityList = vehicleService.findAllConditions();
-        return ControllerBase.getCollectionModelResponse(entityList);
+        var collectionModel = CollectionModel.of(entityList);
+
+        return collectionModel;
     }
 
     @GetMapping("/statuses")
-    public ResponseEntity<CollectionModel<EntityModel<VehicleStatus>>> getAllStatuses() {
+    public CollectionModel<VehicleStatus> getAllStatuses() {
         List<VehicleStatus> entityList = vehicleService.findAllStatus();
-        return ControllerBase.getCollectionModelResponse(entityList);
+        var collectionModel = CollectionModel.of(entityList);
+
+        return collectionModel;
     }
 
     @GetMapping("/types")
-    public ResponseEntity<CollectionModel<EntityModel<VehicleType>>> getAllTypes() {
+    public CollectionModel<VehicleType> getAllTypes() {
         List<VehicleType> entityList = vehicleService.findAllVehicleTypes();
-        return ControllerBase.getCollectionModelResponse(entityList);
+        var collectionModel = CollectionModel.of(entityList);
+
+        return collectionModel;
     }
 
 
@@ -53,9 +60,11 @@ public class VehicleController {
     // Brands
     // ----------------------------------------------------------------------------------------------
     @GetMapping("/brands")
-    public ResponseEntity<CollectionModel<EntityModel<VehicleBrand>>> getAllBrands() {
+    public CollectionModel<VehicleBrand> getAllBrands() {
         List<VehicleBrand> entityList = vehicleService.findAllBrands();
-        return ControllerBase.getCollectionModelResponse(entityList);
+        var collectionModel = CollectionModel.of(entityList);
+
+        return collectionModel;
     }
 
     @GetMapping("/brands/{nameOrId}")
@@ -99,45 +108,45 @@ public class VehicleController {
     // Create
     // ----------------------------------------------------------------------------------------------
     @PostMapping("/cars")
-    public ResponseEntity<EntityModel<GenericDTO<Car>>> createCar(@RequestBody Car carBody) {
+    public ResponseEntity<CarDTO> createCar(@RequestBody Car carBody) {
         if (carBody == null)
-            return ControllerBase.getEntityModelResponse(null);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Car car = vehicleService.createCar(carBody);
 
         if (car != null) {
-            var carDTO = new GenericDTO<>(car);
+            var carDTO = car.toDTO();
 
             carDTO.add(generateCarLinkGet(car));
             carDTO.add(generateCarLinkGetAll());
             carDTO.add(generateCarLinkCreate(car));
             carDTO.add(generateCarLinkDelete(car));
 
-            return ControllerBase.getEntityModelResponse(carDTO);
+            return ResponseEntity.ok(carDTO);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     // http://localhost:8080/api/vehicles/cars/params?vin=zin123&type=car&status=reserved&condition=used&color=red&brandName=bmw&modelName=bm%20123&licensePlate=13-ab-23&yearAssembled=2020&price=10000&seatCount=5&doorCount=918512
     @PostMapping("/cars/params")
-    public ResponseEntity<EntityModel<GenericDTO<Car>>> createCar(@RequestParam String vin, @RequestParam String type,
+    public ResponseEntity<CarDTO> createCar(@RequestParam String vin, @RequestParam String type,
                                                       @RequestParam String status, @RequestParam String condition,
                                                       @RequestParam String color, @RequestParam String brandName, @RequestParam String modelName,
-                                                      @RequestParam String licensePlate, @RequestParam int yearAssembled,
+                                                      @RequestParam String licensePlate, @RequestParam String country, @RequestParam int yearAssembled,
                                                       @RequestParam double price, @RequestParam int seatCount, @RequestParam int doorCount) {
 
-        Car car = vehicleService.createCar(vin, type, status, condition, color, brandName, modelName, licensePlate, yearAssembled, price, seatCount, doorCount);
+        Car car = vehicleService.createCar(vin, type, status, condition, color, brandName, modelName, licensePlate, country, yearAssembled, price, seatCount, doorCount);
 
         if (car != null) {
-            var carDTO = new GenericDTO<>(car);
+            var carDTO = car.toDTO();
 
             carDTO.add(generateCarLinkGet(car));
             carDTO.add(generateCarLinkGetAll());
             carDTO.add(generateCarLinkCreate(car));
             carDTO.add(generateCarLinkDelete(car));
 
-            return ControllerBase.getEntityModelResponse(carDTO);
+            return ResponseEntity.ok(carDTO);
         }
 
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -148,118 +157,67 @@ public class VehicleController {
     // Get cars
     // ----------------------------------------------------------------------------------------------
     @GetMapping("/cars/{vin}")
-    public ResponseEntity<EntityModel<GenericDTO<Car>>> getCar(@PathVariable String vin) {
+    public ResponseEntity<CarDTO> getCar(@PathVariable String vin) {
         Car car = vehicleService.findCar(vin);
-        if (car != null) {
-            var carDTO = new GenericDTO<>(car);
-
-            carDTO.add(generateCarLinkGet(car));
-            carDTO.add(generateCarLinkGetAll());
-            carDTO.add(generateCarLinkCreate(car));
-            carDTO.add(generateCarLinkDelete(car));
-
-            return ControllerBase.getEntityModelResponse(carDTO);
+        if (car == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        var carDTO = car.toDTO();
+
+        carDTO.add(generateCarLinkGet(car));
+        carDTO.add(generateCarLinkGetAll());
+        carDTO.add(generateCarLinkCreate(car));
+        carDTO.add(generateCarLinkDelete(car));
+
+        return ResponseEntity.ok(carDTO);
     }
 
     @GetMapping("/cars")
-    public CollectionModel<GenericDTO<Car>> getCars(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size, @RequestParam Optional<String> sort) {
+    public CollectionModel<CarDTO> getCars(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size, @RequestParam Optional<String> sort) {
 
         int pageIndex = page.orElse(0);
         int pageSize = size.orElse(10);
         String pageSort = sort.orElse("brand");
 
         var cars = vehicleService.findCarsPage(pageIndex, pageSize, pageSort);
-
-        if (cars != null) {
-            var carDTOs = new ArrayList<GenericDTO<Car>>();
-            for (Car car: cars) {
-                carDTOs.add(new GenericDTO<>(car).add(generateCarLinkGet(car)));
-            }
-
-            return CollectionModel.of(carDTOs);
-        }
-
-        return CollectionModel.of(null);
+        return getCarCollectionModel(cars);
     }
 
     // Find cars by brand
     @GetMapping("/cars/brand/{brandName}")
-    public CollectionModel<GenericDTO<Car>> getCarsByBrand(@PathVariable String brandName,
+    public CollectionModel<CarDTO> getCarsByBrand(@PathVariable String brandName,
                                                                             @RequestParam int pageNumber,
                                                                             @RequestParam int pageSize) {
         Page<Car> cars = vehicleService.findCarsByBrand(brandName, pageNumber, pageSize);
-
-        if (cars != null) {
-            var carDTOs = new ArrayList<GenericDTO<Car>>();
-            for (Car car: cars) {
-                carDTOs.add(new GenericDTO<>(car).add(generateCarLinkGet(car)));
-            }
-
-            return CollectionModel.of(carDTOs);
-        }
-
-        return CollectionModel.of(null);
+        return getCarCollectionModel(cars);
     }
 
     // Find cars by model
     @GetMapping("/cars/model/{modelName}")
-    public CollectionModel<GenericDTO<Car>> getCarsByModel(@PathVariable String modelName,
+    public CollectionModel<CarDTO> getCarsByModel(@PathVariable String modelName,
                                                                             @RequestParam int pageNumber,
                                                                             @RequestParam int pageSize) {
         Page<Car> cars = vehicleService.findCarsByModel(modelName, pageNumber, pageSize);
-
-        if (cars != null) {
-            var carDTOs = new ArrayList<GenericDTO<Car>>();
-            for (Car car: cars) {
-                carDTOs.add(new GenericDTO<>(car).add(generateCarLinkGet(car)));
-            }
-
-            return CollectionModel.of(carDTOs);
-        }
-
-        return CollectionModel.of(null);
+        return getCarCollectionModel(cars);
     }
 
     // Find cars by color
     @GetMapping("/cars/color/{colorName}")
-    public CollectionModel<GenericDTO<Car>> getCarsByColor(@PathVariable String colorName,
+    public CollectionModel<CarDTO> getCarsByColor(@PathVariable String colorName,
                                                                             @RequestParam int pageNumber,
                                                                             @RequestParam int pageSize) {
         Page<Car> cars = vehicleService.findCarsByColor(colorName, pageNumber, pageSize);
-
-        if (cars != null) {
-            var carDTOs = new ArrayList<GenericDTO<Car>>();
-            for (Car car: cars) {
-                carDTOs.add(new GenericDTO<>(car).add(generateCarLinkGet(car)));
-            }
-
-            return CollectionModel.of(carDTOs);
-        }
-
-        return CollectionModel.of(null);
+        return getCarCollectionModel(cars);
     }
 
     // Find cars by status
     @GetMapping("/cars/status/{statusName}")
-    public CollectionModel<GenericDTO<Car>> getCarsByStatus(@PathVariable String statusName,
+    public CollectionModel<CarDTO> getCarsByStatus(@PathVariable String statusName,
                                                                              @RequestParam int pageNumber,
                                                                              @RequestParam int pageSize) {
         Page<Car> cars = vehicleService.findCarsByStatus(statusName, pageNumber, pageSize);
-
-        if (cars != null) {
-            var carDTOs = new ArrayList<GenericDTO<Car>>();
-            for (Car car: cars) {
-                Link link = linkTo(methodOn(this.getClass()).getCar(car.getVin())).withSelfRel();
-                carDTOs.add(new GenericDTO<>(car).add(link));
-            }
-
-            return CollectionModel.of(carDTOs);
-        }
-
-        return CollectionModel.of(null);
+        return getCarCollectionModel(cars);
     }
 
 
@@ -268,69 +226,68 @@ public class VehicleController {
     // Update & Delete
     // ----------------------------------------------------------------------------------------------
     @PutMapping("/car/{vin}")
-    public ResponseEntity<EntityModel<GenericDTO<Car>>> updateCar(@PathVariable String vin, @RequestBody Car carBody) {
+    public ResponseEntity<CarDTO> updateCar(@PathVariable String vin, @RequestBody Car carBody) {
         if (vin.isEmpty() || carBody == null || !vin.equalsIgnoreCase(carBody.getVin()))
-            return ControllerBase.getEntityModelResponse(null);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         Car car = vehicleService.createCar(carBody);
-
-        if (car != null) {
-            var carDTO = new GenericDTO<>(car);
-
-            carDTO.add(generateCarLinkGet(car));
-            carDTO.add(generateCarLinkGetAll());
-            carDTO.add(generateCarLinkCreate(car));
-            carDTO.add(generateCarLinkDelete(car));
-
-            return ControllerBase.getEntityModelResponse(carDTO);
+        if (car == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        var carDTO = car.toDTO();
+
+        carDTO.add(generateCarLinkGet(car));
+        carDTO.add(generateCarLinkGetAll());
+        carDTO.add(generateCarLinkCreate(car));
+        carDTO.add(generateCarLinkDelete(car));
+
+        return ResponseEntity.ok(carDTO);
     }
 
     // buy car
     @PostMapping("car/{vin}")
-    public ResponseEntity<EntityModel<GenericDTO<Car>>> buyCar(@PathVariable String vin, @RequestParam String buyerId, @RequestParam String transactionId) {
-        if (vin.isEmpty() || buyerId.isEmpty() || transactionId.isEmpty())
+    public ResponseEntity<CarDTO> buyCar(@PathVariable String vin, @RequestParam String buyerId, @RequestParam String sellerId, @RequestParam double purchasePrice, @RequestParam String transactionId) {
+        if (vin.isEmpty() || buyerId.isEmpty() || sellerId.isEmpty() || transactionId.isEmpty() || purchasePrice <= 0)
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 
-        Car car = vehicleService.buyCar(vin, buyerId, transactionId);
-
-        if (car != null) {
-            var carDTO = new GenericDTO<>(car);
-
-            carDTO.add(generateCarLinkGet(car));
-            carDTO.add(generateCarLinkGetAll());
-            carDTO.add(generateCarLinkCreate(car));
-            carDTO.add(generateCarLinkDelete(car));
-
-            return ControllerBase.getEntityModelResponse(carDTO);
+        Car car = vehicleService.buyCar(vin, buyerId, sellerId, purchasePrice, transactionId);
+        if (car == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        var carDTO = car.toDTO();
+
+        carDTO.add(generateCarLinkGet(car));
+        carDTO.add(generateCarLinkGetAll());
+        carDTO.add(generateCarLinkCreate(car));
+        carDTO.add(generateCarLinkDelete(car));
+
+        return ResponseEntity.ok(carDTO);
     }
 
     // Delete Car
     @DeleteMapping("/cars/{vin}")
-    public ResponseEntity<EntityModel<GenericDTO<Car>>> deleteCar(@PathVariable String vin) {
+    public ResponseEntity<CarDTO> deleteCar(@PathVariable String vin) {
         Car car = vehicleService.deleteCar(vin);
 
-        if (car != null) {
-            var carDTO = new GenericDTO<>(car);
-
-            carDTO.add(generateCarLinkGetAll());
-            carDTO.add(generateCarLinkCreate(car));
-
-            return ControllerBase.getEntityModelResponse(carDTO);
+        if (car == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        var carDTO = car.toDTO();
+
+        carDTO.add(generateCarLinkGetAll());
+        carDTO.add(generateCarLinkCreate(car));
+
+        return ResponseEntity.ok(carDTO);
     }
 
 
 
-    // Generate Links
+    // Internal
     // ----------------------------------------------------------------------------------------------
+
     private Link generateCarLinkGet(Car car) {
         return linkTo(methodOn(this.getClass()).getCar(car.getVin())).withRel("Get Car");
     }
@@ -353,5 +310,22 @@ public class VehicleController {
         String sort = "price";
 
         return linkTo(methodOn(this.getClass()).getCars(Optional.of(page), Optional.of(size), Optional.of(sort))).withRel("Get All Cars");
+    }
+
+    private CollectionModel<CarDTO> getCarCollectionModel(Iterable<Car> cars) {
+
+        if (cars != null) {
+            var carDTOs = new ArrayList<CarDTO>();
+            for (Car car: cars) {
+                CarDTO dto = car.toDTO();
+                dto.add(generateCarLinkGet(car));
+
+                carDTOs.add(dto);
+            }
+
+            return CollectionModel.of(carDTOs);
+        }
+
+        return CollectionModel.of(null);
     }
 }

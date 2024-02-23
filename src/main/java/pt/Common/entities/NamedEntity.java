@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Max;
 import pt.Common.interfaces.INameable;
 
 @MappedSuperclass
-public abstract class NamedEntity<T> extends EntityBase<T> implements INameable {
+public abstract class NamedEntity<T> implements INameable {
     @Max(64)
     @Column(nullable = false, unique = true)
     protected String name;

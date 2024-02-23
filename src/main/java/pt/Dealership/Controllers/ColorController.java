@@ -23,34 +23,44 @@ public class ColorController {
 
     // Create Color
     @PostMapping
-    public ResponseEntity<EntityModel<Color>> createColor(@RequestParam String name, @RequestParam String hexadecimal) {
+    public ResponseEntity<Color> createColor(@RequestParam String name, @RequestParam String hexadecimal) {
         Color color = colorService.create(name, hexadecimal);
-        if (color != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(EntityModel.of(color));
-        } else {
+        if (color == null) {
             return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(color);
         }
     }
 
     // Get Color by Name
     @GetMapping("/{name}")
-    public ResponseEntity<EntityModel<Color>> getColorByName(@PathVariable String name) {
+    public ResponseEntity<Color> getColorByName(@PathVariable String name) {
         Color color = colorService.findByName(name);
-        return ControllerBase.getEntityModelResponse(color);
+        if (color == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(color);
+        }
     }
 
     // Get Color by Hexadecimal
     @GetMapping("/hex/{hexadecimal}")
-    public ResponseEntity<EntityModel<Color>> getColorByHexadecimal(@PathVariable String hexadecimal) {
+    public ResponseEntity<Color> getColorByHexadecimal(@PathVariable String hexadecimal) {
         Color color = colorService.findByHexadecimal(hexadecimal);
-        return ControllerBase.getEntityModelResponse(color);
+        if (color == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(color);
+        }
     }
 
     // Get All Colors
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<Color>>> getAllColors() {
+    public CollectionModel<Color> getAllColors() {
         List<Color> colors = colorService.findAll();
-        return ControllerBase.getCollectionModelResponse(colors);
+        CollectionModel<Color> collectionModel = CollectionModel.of(colors);
+
+        return collectionModel;
     }
 
 }

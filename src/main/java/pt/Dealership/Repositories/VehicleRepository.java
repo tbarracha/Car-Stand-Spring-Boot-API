@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface VehicleRepository<T extends Vehicle> extends JpaRepository<T, String> {
+public interface VehicleRepository<T extends Vehicle<T>> extends JpaRepository<T, String> {
     @Query
     Optional<T> findByVin(String vin);
 
@@ -41,4 +41,13 @@ public interface VehicleRepository<T extends Vehicle> extends JpaRepository<T, S
 
     @Query
     Page<T> findByBuyerId(String buyerId, Pageable pageable);
+
+    @Query
+    Page<T> findBySellerId(String sellerId, Pageable pageable);
+
+    @Query
+    Page<T> findByCreationDate(String creationDate, Pageable pageable);
+
+    @Query
+    Page<T> findByPurchaseDate(String purchaseDate, Pageable pageable);
 }

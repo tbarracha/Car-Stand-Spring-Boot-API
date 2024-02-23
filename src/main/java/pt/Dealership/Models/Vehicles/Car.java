@@ -3,11 +3,12 @@ package pt.Dealership.Models.Vehicles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import pt.Common.entities.GenericDTO;
+import pt.Common.interfaces.IDTOable;
 import pt.Dealership.Models.Color;
 import pt.Dealership.Models.VehicleComponents.*;
 
 @Entity
-public class Car extends Vehicle<Car> {
+public class Car extends Vehicle<Car> implements IDTOable<CarDTO> {
     @Min(2)
     private Integer seatCount;
 
@@ -15,12 +16,6 @@ public class Car extends Vehicle<Car> {
     private Integer doorCount;
 
     public Car() {
-    }
-
-    public Car(VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearOfAssembly, double price, int seatCount, int doorCount) {
-        super(type, status, condition, color, brand, model, licensePlate, yearOfAssembly, price);
-        this.seatCount = seatCount;
-        this.doorCount = doorCount;
     }
 
     public Car(String vin, VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearOfAssembly, double price, int seatCount, int doorCount) {
@@ -47,7 +42,19 @@ public class Car extends Vehicle<Car> {
     }
 
     @Override
-    public GenericDTO<Car> toDTO() {
-        return new GenericDTO<>(this);
+    public CarDTO toDTO() {
+        return new CarDTO(
+                this.vin,
+                this.type,
+                this.status,
+                this.condition,
+                this.color,
+                this.brand,
+                this.model,
+                this.licensePlate,
+                this.releaseYear,
+                this.seatCount,
+                this.doorCount
+        );
     }
 }

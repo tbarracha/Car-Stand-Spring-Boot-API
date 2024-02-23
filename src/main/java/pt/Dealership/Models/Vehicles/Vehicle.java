@@ -2,13 +2,13 @@ package pt.Dealership.Models.Vehicles;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import pt.Common.interfaces.IDTOable;
 import pt.Dealership.Enums.DefaultVehicleStatus;
 import pt.Dealership.Models.Color;
 import pt.Dealership.Models.VehicleComponents.*;
 
+
 @MappedSuperclass
-public abstract class Vehicle<T> implements IDTOable<T> {
+public abstract class Vehicle<T> {
     @Id
     @Column(unique = true, nullable = false)
     protected String vin;
@@ -35,17 +35,24 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     protected LicensePlate licensePlate;
 
     @Min(1990)
-    @Max(2030)
-    protected Integer yearOfAssembly; // can't be "year" because it is a reserved variable name
+    @Max(2024)
+    protected Integer releaseYear; // can't be "year" because it is a reserved variable name
+
+    protected String creationDate;
+    protected String purchaseDate;
 
     @DecimalMin(value = "0.99")
-    protected Double price;
+    protected Double sellPrice;
 
-    //@Transient
-    String buyerId;
+    @DecimalMin(value = "0.99")
+    protected Double buyingPrice;
 
-    //@Transient
-    String transactionId;
+    protected String buyerId;
+
+    protected String sellerId;
+
+    @Column(unique = true)
+    protected String transactionId;
 
     public Vehicle() {
 
@@ -56,11 +63,10 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.status = status;
         this.condition = condition;
         this.color = color;
-        this.brand = brand;
         this.model = model;
         this.licensePlate = licensePlate;
-        this.yearOfAssembly = yearOfAssembly;
-        this.price = price;
+        this.releaseYear = yearOfAssembly;
+        this.sellPrice = price;
     }
 
     public Vehicle(String vin, VehicleType type, VehicleStatus status, VehicleCondition condition, Color color, VehicleBrand brand, VehicleModel model, LicensePlate licensePlate, int yearOfAssembly, double price) {
@@ -69,11 +75,10 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.status = status;
         this.condition = condition;
         this.color = color;
-        this.brand = brand;
         this.model = model;
         this.licensePlate = licensePlate;
-        this.yearOfAssembly = yearOfAssembly;
-        this.price = price;
+        this.releaseYear = yearOfAssembly;
+        this.sellPrice = price;
     }
 
     // Getters and Setters
@@ -158,26 +163,36 @@ public abstract class Vehicle<T> implements IDTOable<T> {
 
 
     // Year of Assembly
-    public Integer getYearOfAssembly() {
-        return yearOfAssembly;
+    public Integer getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setYearOfAssembly(Integer yearOfAssembly) {
-        this.yearOfAssembly = yearOfAssembly;
-    }
-
-
-    // Price
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
     }
 
 
-    // Buyer
+    // Selling Price
+    public Double getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(Double sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
+
+    // Buying Price
+    public Double getBuyingPrice() {
+        return buyingPrice;
+    }
+
+    public void setBuyingPrice(Double buyingPrice) {
+        this.buyingPrice = buyingPrice;
+    }
+
+
+    // Buyer ID
     public String getBuyerId() {
         return buyerId;
     }
@@ -186,6 +201,15 @@ public abstract class Vehicle<T> implements IDTOable<T> {
         this.buyerId = buyerId;
     }
 
+
+    // Seller ID
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
 
     // transaction
     public String getTransactionId() {
@@ -197,6 +221,24 @@ public abstract class Vehicle<T> implements IDTOable<T> {
     }
 
 
+    // Creation Date
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+
+    // Purcahse Date
+    public String getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(String purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
 
     // Delete
     public void delete() {

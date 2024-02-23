@@ -20,6 +20,8 @@ import pt.Dealership.Repositories.VehicleModelRepository;
 import pt.Dealership.Repositories.VehicleStatusRepository;
 import pt.Dealership.Repositories.VehicleTypeRepository;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -75,27 +77,27 @@ public class VehicleService {
     private void createExampleCars() {
         print("\n=== CREATING example cars! ===\n");
 
-        createCar("VIN123", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Black", "Toyota", "Camry", "ABC123", 2023, 30000, 5, 4);
+        createCar("VIN123", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Black", "Toyota", "Camry", "ABC123", "PT", 2023, 30000, 5, 4);
 
-        createCar("VIN456", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.SOLD.toString(), DefaultVehicleCondition.USED.toString(), "White", "Honda", "Accord", "XYZ789", 2022, 28000, 5, 4);
+        createCar("VIN456", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.SOLD.toString(), DefaultVehicleCondition.USED.toString(), "White", "Honda", "Accord", "XYZ789", "PT", 2022, 28000, 5, 4);
 
-        createCar("VIN789", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.RESERVED.toString(), DefaultVehicleCondition.REFURBISHED.toString(), "Silver", "BMW", "X5", "DEF456", 2024, 50000, 5, 4);
+        createCar("VIN789", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.RESERVED.toString(), DefaultVehicleCondition.REFURBISHED.toString(), "Silver", "BMW", "X5", "DEF456", "PT", 2024, 50000, 5, 4);
 
-        createCar("VIN101", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Red", "Ford", "Fusion", "GHI789", 2023, 35000, 5, 4);
+        createCar("VIN101", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Red", "Ford", "Fusion", "GHI789", "PT", 2023, 35000, 5, 4);
 
-        createCar("VIN202", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Blue", "Chevrolet", "Malibu", "JKL012", 2023, 32000, 5, 4);
+        createCar("VIN202", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Blue", "Chevrolet", "Malibu", "JKL012", "PT", 2023, 32000, 5, 4);
 
-        createCar("VIN303", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.SOLD.toString(), DefaultVehicleCondition.USED.toString(), "Green", "Nissan", "Altima", "MNO345", 2021, 25000, 5, 4);
+        createCar("VIN303", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.SOLD.toString(), DefaultVehicleCondition.USED.toString(), "Green", "Nissan", "Altima", "MNO345", "PT", 2021, 25000, 5, 4);
 
-        createCar("VIN404", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.RESERVED.toString(), DefaultVehicleCondition.NEW.toString(), "Grey", "Audi", "A4", "PQR678", 2024, 48000, 5, 4);
+        createCar("VIN404", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.RESERVED.toString(), DefaultVehicleCondition.NEW.toString(), "Grey", "Audi", "A4", "PQR678", "PT", 2024, 48000, 5, 4);
 
-        createCar("VIN505", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Yellow", "Tesla", "Model 3", "STU901", 2023, 55000, 5, 4);
+        createCar("VIN505", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Yellow", "Tesla", "Model 3", "STU901", "PT", 2023, 55000, 5, 4);
 
-        createCar("VIN606", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Black", "Mercedes-Benz", "C-Class", "VWX234", 2023, 45000, 5, 4);
+        createCar("VIN606", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Black", "Mercedes-Benz", "C-Class", "VWX234", "PT", 2023, 45000, 5, 4);
 
-        createCar("VIN707", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.RESERVED.toString(), DefaultVehicleCondition.REFURBISHED.toString(), "White", "Volkswagen", "Passat", "YZA567", 2024, 40000, 5, 4);
+        createCar("VIN707", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.RESERVED.toString(), DefaultVehicleCondition.REFURBISHED.toString(), "White", "Volkswagen", "Passat", "YZA567", "PT", 2024, 40000, 5, 4);
 
-        createCar("VIN808", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Red", "Subaru", "Outback", "BCD890", 2023, 38000, 5, 4);
+        createCar("VIN808", DefaultVehicleType.CAR.toString(), DefaultVehicleStatus.AVAILABLE.toString(), DefaultVehicleCondition.NEW.toString(), "Red", "Subaru", "Outback", "BCD890", "PT", 2023, 38000, 5, 4);
 
         print("\n=== CREATED example cars! ===\n");
     }
@@ -363,9 +365,9 @@ public class VehicleService {
         }
     }
 
-    public LicensePlate findLicensePlate(String name) {
+    public LicensePlate findLicensePlate(String license) {
         try {
-            return licensePlateRepository.findByName(name).orElse(null);
+            return licensePlateRepository.findByLicense(license).orElse(null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -387,15 +389,15 @@ public class VehicleService {
     }
 
     @Transactional
-    public LicensePlate createLicensePlate(String name) {
+    public LicensePlate createLicensePlate(String license, String country, String vin) {
         try {
-            var license = findLicensePlate(name);
+            var licensePlate = findLicensePlate(license);
 
-            if (license == null) {
-                license = licensePlateRepository.save(new LicensePlate(name));
+            if (licensePlate == null) {
+                licensePlate = licensePlateRepository.save(new LicensePlate(license, country, vin));
             }
 
-            return license;
+            return licensePlate;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -491,11 +493,10 @@ public class VehicleService {
         car.setStatus(body.getStatus());
         car.setCondition(body.getCondition());
         car.setColor(body.getColor());
-        car.setBrand(body.getBrand());
         car.setModel(body.getModel());
         car.setLicensePlate(body.getLicensePlate());
-        car.setYearOfAssembly(body.getYearOfAssembly());
-        car.setPrice(body.getPrice());
+        car.setReleaseYear(body.getReleaseYear());
+        car.setSellPrice(body.getSellPrice());
         car.setSeatCount(body.getSeatCount());
         car.setDoorCount(body.getDoorCount());
 
@@ -548,7 +549,7 @@ public class VehicleService {
     }
 
     @Transactional
-    public Car createCar(String vin, String type, String status, String condition, String color, String brand, String model, String licensePlate, int yearOfAssembly, double price, int seatCount, int doorCount) {
+    public Car createCar(String vin, String type, String status, String condition, String color, String brand, String model, String licensePlate, String country, int yearOfAssembly, double price, int seatCount, int doorCount) {
         try {
             Car car = findCar(vin);
 
@@ -565,13 +566,17 @@ public class VehicleService {
                         colorService.findByName(color.toLowerCase()),
                         vBrand,
                         vModel,
-                        createLicensePlate(licensePlate.toLowerCase()),
+                        createLicensePlate(licensePlate, country, vin),
                         yearOfAssembly,
                         price,
                         seatCount,
                         doorCount
                 );
 
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String creationDate = dateFormat.format(new Date());
+
+                car.setCreationDate(creationDate);
                 car = saveCar(car);
             }
 
@@ -706,7 +711,7 @@ public class VehicleService {
     }
 
     @Transactional
-    public Car buyCar(String vin, String buyerId, String transactionId) {
+    public Car buyCar(String vin, String buyerId, String sellerId, double purchasePrice, String transactionId) {
         Car car = findCar(vin);
 
         if (car == null) {
@@ -721,8 +726,13 @@ public class VehicleService {
             return null;
         }
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String purchaseDate = dateFormat.format(new Date());
+
         car.setStatus(status);
         car.setBuyerId(buyerId);
+        car.setSellerId(sellerId);
+        car.setPurchaseDate(purchaseDate);
         car.setTransactionId(transactionId);
 
         return saveCar(car);
