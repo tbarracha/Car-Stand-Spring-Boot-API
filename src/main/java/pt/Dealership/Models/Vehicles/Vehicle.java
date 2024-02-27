@@ -51,7 +51,7 @@ public abstract class Vehicle<T> {
 
     protected String sellerId;
 
-    @Column(unique = true)
+    //@Column(unique = true)
     protected String transactionId;
 
     public Vehicle() {

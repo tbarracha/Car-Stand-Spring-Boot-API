@@ -573,7 +573,7 @@ public class VehicleService {
                         doorCount
                 );
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat(Utils.dateFormat);
                 String creationDate = dateFormat.format(new Date());
 
                 car.setCreationDate(creationDate);
@@ -726,15 +726,30 @@ public class VehicleService {
             return null;
         }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Utils.dateFormat); // "yyyy-MM-dd HH:mm:ss"
         String purchaseDate = dateFormat.format(new Date());
 
         car.setStatus(status);
         car.setBuyerId(buyerId);
         car.setSellerId(sellerId);
+        car.setBuyingPrice(purchasePrice);
         car.setPurchaseDate(purchaseDate);
         car.setTransactionId(transactionId);
 
         return saveCar(car);
+    }
+
+    @Transactional
+    public Car registerCar(String vim, String sellerId, double sellPrice) {
+        Car car = findCar(vim);
+
+        if (car != null) {
+            car.setSellerId(sellerId);
+            car.setBuyingPrice(sellPrice);
+
+            saveCar(car);
+        }
+
+        return car;
     }
 }

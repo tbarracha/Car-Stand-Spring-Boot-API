@@ -152,6 +152,42 @@ public class VehicleController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping("/cars/register/")
+    public ResponseEntity<CarDTO> registerCar(@RequestParam String vin, @RequestParam String sellerId, @RequestParam double sellPrice) {
+        var car = vehicleService.registerCar(vin, sellerId, sellPrice);
+
+        if (car != null) {
+            var carDTO = car.toDTO();
+
+            carDTO.add(generateCarLinkGet(car));
+            carDTO.add(generateCarLinkGetAll());
+            carDTO.add(generateCarLinkCreate(car));
+            carDTO.add(generateCarLinkDelete(car));
+
+            return ResponseEntity.ok(carDTO);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/cars/buy")
+    public ResponseEntity<CarDTO> registerCar(@RequestParam String vin, @RequestParam String sellerId, @RequestParam String buyerId, @RequestParam double purhcasePrice, @RequestParam String transactionId) {
+        var car = vehicleService.buyCar(vin, sellerId, buyerId, purhcasePrice, transactionId);
+
+        if (car != null) {
+            var carDTO = car.toDTO();
+
+            carDTO.add(generateCarLinkGet(car));
+            carDTO.add(generateCarLinkGetAll());
+            carDTO.add(generateCarLinkCreate(car));
+            carDTO.add(generateCarLinkDelete(car));
+
+            return ResponseEntity.ok(carDTO);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
 
 
     // Get cars
